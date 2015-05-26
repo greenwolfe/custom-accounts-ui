@@ -1,0 +1,92 @@
+<template name="loginButtons">
+  {{#if currentUser}}
+    {{#unless loggingIn}}
+      {{>logOutDropdown}}
+    {{/unless}}
+  {{else}}
+    {{>logInDropdown}}
+  {{/if}}
+</template>
+
+<template name="logOutDropdown">
+  <li id="login-dropdown-list" class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown">
+      Firstname Lastname
+      <b class="caret"></b>
+    </a>
+    <div class="dropdown-menu">
+      <button class="btn btn-default btn-block" id="login-buttons-open-change-password">Change Password</button>
+      <button class="btn btn-block btn-primary" id="login-buttons-logout">Sign out</button>
+    </div>
+  </li>
+</template>
+
+<template name="logInDropdown">
+  <li id="login-dropdown-list" class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown">
+      Sign in/Join
+      <b class="caret"></b>
+    </a>
+    <div class="dropdown-menu">
+    {{>loginButtonsMessages}}
+    {{#if inSignupFlow}}
+      {{>createAccountForm}}
+    {{else}}
+      {{>loginForm}}
+    {{/if}}
+    </div>
+  </li>
+</template>
+
+<template name="loginForm">
+  <input id="login-username-or-email" type="usernameOrEmail" placeholder="Username or Email" class="form-control" />
+  <input id="login-password" type="password" placeholder="Password" class="form-control" />
+
+  <button class="btn btn-primary col-xs-12 col-sm-12" id="login-buttons-signin" type="button">Sign in</button>
+
+  <div id="login-other-options">
+    <a id="forgot-password-link" class="pull-left" >Forgot password?</a>
+    <a id="signup-link" class="pull-right" >Create account</a>
+  </div>
+</template>
+
+<template name="createAccountForm">
+  <input id="login-create-firstname" type="text" placeholder="First name" class="form-control" />
+  <input id="login-create-lastname" type="text" placeholder="Last name" class="form-control" />
+  <input id="login-create-username" type="text" placeholder="Username" class="form-control" />
+  <input id="login-create-email" type="email" placeholder="Email" class="form-control" />
+  <input id="login-create-password" type="password" placeholder="Password" class="form-control" />
+  <input id="login-create-password-again" type="password" placeholder="Confirm Password" class="form-control" />
+  <select id="login-create-role" type="role" class="form-control" required>
+    <option value="" selected disabled>Choose role</option>
+    <option value="student">Student</option>
+    <option value="teacher">Teacher</option>
+    <option value="parentOrAdvisor">Parent or Advisor</option>
+  </select>
+  <select id="login-create-section" type="section" class="form-control hidden" required>
+    <option value="" selected disabled>Choose section</option>
+    {{#each sections}}
+      <option value="{{_id}}">{{{section}}}</option>
+    {{/each}}
+  </select>
+  <select id="login-create-choose-students" type="section" class="form-control hidden" required multiple size=2>
+    <option value="" selected disabled>Choose your student(s)</option>
+    <option value="id1">Student 1</option>
+    <option value="id2">Student 2</option>
+    <option value="id3">Student 3</option>
+  </select>
+
+
+  <button class="btn btn-primary col-xs-12 col-sm-12" id="login-buttons-create" type="button">Create</button>
+  <button class="btn btn-primary col-xs-12 col-sm-12" id="login-buttons-cancel-create" type="button">Cancel</button>
+</template>
+
+<!-- used in various places to display messages to user -->
+<template name="loginButtonsMessages">
+  {{#if errorMessage}}
+    <div class="alert alert-danger">{{errorMessage}}</div>
+  {{/if}}
+  {{#if infoMessage}}
+    <div class="alert alert-success no-margin">{{infoMessage}}</div>
+  {{/if}}
+</template>
