@@ -1,4 +1,4 @@
-Sections = new Meteor.Collection('sections');
+Sections = new Meteor.Collection('Sections');
 
 Sections.allow({
   insert: function(userId, doc) {

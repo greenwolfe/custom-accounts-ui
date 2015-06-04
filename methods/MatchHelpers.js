@@ -6,6 +6,10 @@ Match.idString = Match.Where(function (id) {
 $         end of string*/
 });
 
+Match.enrollmentTokenString = Match.Where(function (id) {
+    return (Match.test(id,String) && (id.length  == 43));
+});
+
 Match.nonEmptyString = Match.Where(function (x) {
   return (Match.test(x,String) && (x.length > 0));
 });

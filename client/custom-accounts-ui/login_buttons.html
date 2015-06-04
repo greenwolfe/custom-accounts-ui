@@ -1,7 +1,9 @@
 <template name="loginButtons">
   {{#if currentUser}}
     {{#unless loggingIn}}
-      {{>logOutDropdown}}
+      {{#with currentUser}}
+        {{>logOutDropdown}}
+      {{/with}}
     {{/unless}}
   {{else}}
     {{>logInDropdown}}
@@ -11,12 +13,17 @@
 <template name="logOutDropdown">
   <li id="login-dropdown-list" class="dropdown">
     <a class="dropdown-toggle" data-toggle="dropdown">
-      Firstname Lastname
+      {{{profile.firstName}}} {{{profile.lastName}}}
       <b class="caret"></b>
     </a>
     <div class="dropdown-menu">
-      <button class="btn btn-default btn-block" id="login-buttons-open-change-password">Change Password</button>
-      <button class="btn btn-block btn-primary" id="login-buttons-logout">Sign out</button>
+      {{>loginButtonsMessages}}
+      {{#if inChangePasswordFlow}}
+        {{>changePasswordForm}}
+      {{else}}
+        <button class="btn btn-default btn-block" id="login-buttons-open-change-password">Change Password</button>
+        <button class="btn btn-block btn-primary" id="login-buttons-logout">Sign out</button>
+      {{/if}}
     </div>
   </li>
 </template>
@@ -28,12 +35,16 @@
       <b class="caret"></b>
     </a>
     <div class="dropdown-menu">
-    {{>loginButtonsMessages}}
-    {{#if inSignupFlow}}
-      {{>createAccountForm}}
-    {{else}}
-      {{>loginForm}}
-    {{/if}}
+      {{>loginButtonsMessages}}
+      {{#if inSignupFlow}}
+        {{>createAccountForm}}
+      {{else}}
+        {{#if inForgotPasswordFlow}}
+          {{>forgotPasswordForm}}
+        {{else}}
+          {{>loginForm}}
+        {{/if}}
+      {{/if}}
     </div>
   </li>
 </template>
@@ -55,8 +66,8 @@
   <input id="login-create-lastname" type="text" placeholder="Last name" class="form-control" />
   <input id="login-create-username" type="text" placeholder="Username" class="form-control" />
   <input id="login-create-email" type="email" placeholder="Email" class="form-control" />
-  <input id="login-create-password" type="password" placeholder="Password" class="form-control" />
-  <input id="login-create-password-again" type="password" placeholder="Confirm Password" class="form-control" />
+<!--  <input id="login-create-password" type="password" placeholder="Password" class="form-control" />
+  <input id="login-create-password-again" type="password" placeholder="Confirm Password" class="form-control" />-->
   <select id="login-create-role" type="role" class="form-control" required>
     <option value="" selected disabled>Choose role</option>
     <option value="student">Student</option>
@@ -69,16 +80,38 @@
       <option value="{{_id}}">{{{section}}}</option>
     {{/each}}
   </select>
-  <select id="login-create-choose-students" type="section" class="form-control hidden" required multiple size=2>
-    <option value="" selected disabled>Choose your student(s)</option>
-    <option value="id1">Student 1</option>
-    <option value="id2">Student 2</option>
-    <option value="id3">Student 3</option>
-  </select>
+  <div id="login-create-choose-students" class="hidden">
+    <p>Please enter the names of students you would like to observe.</p>
+    <input class="form-control login-create-choose-student" type="student" placeholder="Firstname Lastname <Enter>"  />
+    {{#each students}}
+      <input class="form-control login-create-choose-student" type="student" value="{{name}}" placeholder="Firstname Lastname <Enter>"/>
+    {{/each}}
+  </div>
 
 
   <button class="btn btn-primary col-xs-12 col-sm-12" id="login-buttons-create" type="button">Create</button>
   <button class="btn btn-primary col-xs-12 col-sm-12" id="login-buttons-cancel-create" type="button">Cancel</button>
+</template>
+
+<template name="forgotPasswordForm">
+  <div class="login-form">
+
+      <input id="forgot-password-email" type="email" placeholder="Email" class="form-control" />
+
+    <button class="btn btn-primary login-button-form-submit col-xs-12 col-sm-12" id="login-buttons-forgot-password">Reset password</button>
+    <button class="btn btn-primary col-xs-12 col-sm-12" id="login-buttons-cancel-forgot-password" type="button">Cancel</button>
+  </div>
+</template>
+
+<template name="changePasswordForm">
+  <div class="login-form">
+    <input id="change-password-old" type="password" placeholder="Current password" class="form-control" />
+    <input id="change-password-new" type="password" placeholder="New password" class="form-control" />
+    <input id="change-password-new-again" type="password" placeholder="New password (again)" class="form-control" />
+
+    <button class="btn btn-block btn-primary" id="login-buttons-do-change-password">Change password</button>
+    <button class="btn btn-block btn-default" id="login-buttons-cancel-change-password">Cancel</button>
+  </div>
 </template>
 
 <!-- used in various places to display messages to user -->

@@ -1,0 +1,56 @@
+<body>
+	{{> setPasswordDialog}}
+	{{> loginMessagesDialog}}
+</body>
+
+<template name="setPasswordDialog">
+		<div class="modal" id="login-set-password-modal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title">Choose a Password</h4>
+					</div>
+					<div class="modal-body">
+						<input id="login-create-password" type="password" placeholder="Password" class="form-control" />
+  					<input id="login-create-password-again" type="password" placeholder="Confirm Password" class="form-control" /><br>
+						{{> loginButtonsMessages}}
+					</div>
+					<div class="modal-footer">
+						<a class="btn btn-default" id="login-cancel-set-password-dialog">{{cancelOrClose}}</a>
+						<button class="btn btn-primary" id="login-set-password">
+							Set Password
+						</button>
+					</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dalog -->
+		</div><!-- /.modal -->
+</template>
+
+
+<!--
+Not using right now, probably don't need
+<template name="_loginButtonsMessagesDialog">
+	{{#if visible}}
+		<div class="accounts-dialog accounts-centered-dialog" id="login-buttons-message-dialog">
+			{{> loginButtonsMessages}}
+			<div class="login-button" id="messages-dialog-dismiss-button">{{i18n 'loginButtonsMessagesDialog.dismiss'}}</div>
+		</div>
+	{{/if}}
+</template>
+-->
+
+<template name="loginMessagesDialog">
+		<div class="modal" id="login-messages-modal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-body">
+						{{> loginButtonsMessages}}
+					</div>
+					<div class="modal-footer">
+						<a class="btn btn-default" id="login-cancel-message-dialog">Dismiss</a>
+					</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dalog -->
+		</div><!-- /.modal -->
+</template>

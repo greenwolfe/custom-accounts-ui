@@ -1,3 +1,5 @@
+//Must be placed in a subfolder so that it is loaded before
+//the templates that use its global variables
 var VALID_KEYS = [
   'dropdownVisible',
 
@@ -5,24 +7,25 @@ var VALID_KEYS = [
   'inSignupFlow',
   'inForgotPasswordFlow',
   'inChangePasswordFlow',
-  'inMessageOnlyFlow',
+//  'inMessageOnlyFlow',
 
   'errorMessage',
   'infoMessage',
+  'childrenOrAdvisees', 
 
   // dialogs with messages (info and error)
   'resetPasswordToken',
   'enrollAccountToken',
-  'justVerifiedEmail',
+//  'justVerifiedEmail',
 
-  'configureLoginServiceDialogVisible',
-  'configureLoginServiceDialogServiceName',
-  'configureLoginServiceDialogSaveDisabled'
+//  'configureLoginServiceDialogVisible',
+//  'configureLoginServiceDialogServiceName',
+//  'configureLoginServiceDialogSaveDisabled'
 ];
 
 var validateKey = function (key) {
   if (!_.contains(VALID_KEYS, key)){
-    throw new Error("Invalid key in loginButtonsSession: " + key);
+    throw new Meteor.Error("Invalid key in loginButtonsSession: " + key);
   }
 };
 
@@ -36,11 +39,11 @@ VALID_KEYS.forEach(function(key) {
 })
 
 // XXX we should have a better pattern for code private to a package like this one
-Accounts._loginButtonsSession = {
+loginButtonsSession = {
   set: function(key, value) {
     validateKey(key);
     if (_.contains(['errorMessage', 'infoMessage'], key)){
-      throw new Error("Don't set errorMessage or infoMessage directly. Instead, use errorMessage() or infoMessage().");
+      throw new Meteor.Error("Don't set errorMessage or infoMessage directly. Instead, use errorMessage() or infoMessage().");
     }
 
     this._set(key, value);
@@ -58,9 +61,10 @@ Accounts._loginButtonsSession = {
   closeDropdown: function () {
     this.set('inSignupFlow', false);
     this.set('inForgotPasswordFlow', false);
-    this.set('inChangePasswordFlow', false);
-    this.set('inMessageOnlyFlow', false);
+//    this.set('inChangePasswordFlow', false);
+//    this.set('inMessageOnlyFlow', false);
     this.set('dropdownVisible', false);
+    this.set('childrenOrAdvisees', false);
     this.resetMessages();
   },
 
@@ -78,9 +82,9 @@ Accounts._loginButtonsSession = {
 
   // is there a visible dialog that shows messages (info and error)
   isMessageDialogVisible: function () {
-    return this.get('resetPasswordToken') ||
-      this.get('enrollAccountToken') ||
-      this.get('justVerifiedEmail');
+    return this.get('enrollAccountToken'); //||
+      //this.get('resetPasswordToken') ||
+      //this.get('justVerifiedEmail');
   },
 
   // ensure that somethings displaying a message (info or error) is
@@ -100,14 +104,5 @@ Accounts._loginButtonsSession = {
   resetMessages: function () {
     this._set("errorMessage", null);
     this._set("infoMessage", null);
-  },
-
-  configureService: function (name) {
-    this.set('configureLoginServiceDialogVisible', true);
-    this.set('configureLoginServiceDialogServiceName', name);
-    this.set('configureLoginServiceDialogSaveDisabled', true);
-    setTimeout(function(){
-      $('#configure-login-service-dialog-modal').modal();
-    }, 500)
   }
 };

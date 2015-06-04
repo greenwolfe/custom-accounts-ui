@@ -1,0 +1,799 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"border-",
+				"border-width"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"contents": "<template name=\"loginButtons\">\n  {{#if currentUser}}\n    {{#unless loggingIn}}\n      {{#with currentUser}}\n        {{#if inChangePasswordFlow}}\n          {{>changePasswordForm}}\n        {{else}}\n          {{>logOutDropdown}}\n        {{/if}}\n      {{/with}}\n    {{/unless}}\n  {{else}}\n    {{>logInDropdown}}\n  {{/if}}\n</template>\n\n<template name=\"logOutDropdown\">\n  <li id=\"login-dropdown-list\" class=\"dropdown\">\n    <a class=\"dropdown-toggle\" data-toggle=\"dropdown\">\n      {{{profile.firstName}}} {{{profile.lastName}}}\n      <b class=\"caret\"></b>\n    </a>\n    <div class=\"dropdown-menu\">\n      <button class=\"btn btn-default btn-block\" id=\"login-buttons-open-change-password\">Change Password</button>\n      <button class=\"btn btn-block btn-primary\" id=\"login-buttons-logout\">Sign out</button>\n    </div>\n  </li>\n</template>\n\n<template name=\"logInDropdown\">\n  <li id=\"login-dropdown-list\" class=\"dropdown\">\n    <a class=\"dropdown-toggle\" data-toggle=\"dropdown\">\n      Sign in/Join\n      <b class=\"caret\"></b>\n    </a>\n    <div class=\"dropdown-menu\">\n    {{>loginButtonsMessages}}\n    {{#if inSignupFlow}}\n      {{>createAccountForm}}\n    {{else}}\n      {{#if inForgotPasswordFlow}}\n        {{>forgotPasswordForm}}\n      {{else}}\n        {{>loginForm}}\n      {{/if}}\n    {{/if}}\n    </div>\n  </li>\n</template>\n\n<template name=\"loginForm\">\n  <input id=\"login-username-or-email\" type=\"usernameOrEmail\" placeholder=\"Username or Email\" class=\"form-control\" />\n  <input id=\"login-password\" type=\"password\" placeholder=\"Password\" class=\"form-control\" />\n\n  <button class=\"btn btn-primary col-xs-12 col-sm-12\" id=\"login-buttons-signin\" type=\"button\">Sign in</button>\n\n  <div id=\"login-other-options\">\n    <a id=\"forgot-password-link\" class=\"pull-left\" >Forgot password?</a>\n    <a id=\"signup-link\" class=\"pull-right\" >Create account</a>\n  </div>\n</template>\n\n<template name=\"createAccountForm\">\n  <input id=\"login-create-firstname\" type=\"text\" placeholder=\"First name\" class=\"form-control\" />\n  <input id=\"login-create-lastname\" type=\"text\" placeholder=\"Last name\" class=\"form-control\" />\n  <input id=\"login-create-username\" type=\"text\" placeholder=\"Username\" class=\"form-control\" />\n  <input id=\"login-create-email\" type=\"email\" placeholder=\"Email\" class=\"form-control\" />\n<!--  <input id=\"login-create-password\" type=\"password\" placeholder=\"Password\" class=\"form-control\" />\n  <input id=\"login-create-password-again\" type=\"password\" placeholder=\"Confirm Password\" class=\"form-control\" />-->\n  <select id=\"login-create-role\" type=\"role\" class=\"form-control\" required>\n    <option value=\"\" selected disabled>Choose role</option>\n    <option value=\"student\">Student</option>\n    <option value=\"teacher\">Teacher</option>\n    <option value=\"parentOrAdvisor\">Parent or Advisor</option>\n  </select>\n  <select id=\"login-create-section\" type=\"section\" class=\"form-control hidden\" required>\n    <option value=\"\" selected disabled>Choose section</option>\n    {{#each sections}}\n      <option value=\"{{_id}}\">{{{section}}}</option>\n    {{/each}}\n  </select>\n  <div id=\"login-create-choose-students\" class=\"hidden\">\n    <p>Please enter the names of students you would like to observe.</p>\n    <input class=\"form-control login-create-choose-student\" type=\"student\" placeholder=\"Firstname Lastname <Enter>\"  />\n    {{#each students}}\n      <input class=\"form-control login-create-choose-student\" type=\"student\" value=\"{{name}}\" placeholder=\"Firstname Lastname <Enter>\"/>\n    {{/each}}\n  </div>\n\n\n  <button class=\"btn btn-primary col-xs-12 col-sm-12\" id=\"login-buttons-create\" type=\"button\">Create</button>\n  <button class=\"btn btn-primary col-xs-12 col-sm-12\" id=\"login-buttons-cancel-create\" type=\"button\">Cancel</button>\n</template>\n\n<template name=\"forgotPasswordForm\">\n  <div class=\"login-form\">\n\n      <input id=\"forgot-password-email\" type=\"email\" placeholder=\"Email\" class=\"form-control\" />\n\n    <button class=\"btn btn-primary login-button-form-submit col-xs-12 col-sm-12\" id=\"login-buttons-forgot-password\">Reset password</button>\n    <button class=\"btn btn-primary col-xs-12 col-sm-12\" id=\"login-buttons-cancel-forgot-password\" type=\"button\">Cancel</button>\n  </div>\n</template>\n\n<template name=\"changePasswordForm\">\n  {{#each fields}}\n    {{> _loginButtonsFormField}}\n  {{/each}}\n  <button class=\"btn btn-block btn-primary\" id=\"login-buttons-do-change-password\">{{i18n 'loginButtonsChangePassword.submit'}}</button>\n  <button class=\"btn btn-block btn-default\" id=\"login-buttons-cancel-change-password\">{{i18n 'loginButtonsChangePassword.cancel'}}</button>\n</template>\n\n<!-- used in various places to display messages to user -->\n<template name=\"loginButtonsMessages\">\n  {{#if errorMessage}}\n    <div class=\"alert alert-danger\">{{errorMessage}}</div>\n  {{/if}}\n  {{#if infoMessage}}\n    <div class=\"alert alert-success no-margin\">{{infoMessage}}</div>\n  {{/if}}\n</template>",
+			"file": "client/custom-accounts-ui/login_buttons.html",
+			"file_size": 4891,
+			"file_write_time": 130778734171465137,
+			"settings":
+			{
+				"buffer_size": 4861,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "client/custom-accounts-ui/login_buttons_dialogs.html",
+			"settings":
+			{
+				"buffer_size": 1887,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "client/custom-accounts-ui/i18n/en.i18n.js",
+			"settings":
+			{
+				"buffer_size": 2326,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "client/custom-accounts-ui/login_buttons.js",
+			"settings":
+			{
+				"buffer_size": 12836,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "client/custom-accounts-ui/login_buttons_dialogs.js",
+			"settings":
+			{
+				"buffer_size": 3854,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "methods/MatchHelpers.js",
+			"settings":
+			{
+				"buffer_size": 2485,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "server/email.js",
+			"settings":
+			{
+				"buffer_size": 472,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "server/users.js",
+			"settings":
+			{
+				"buffer_size": 3195,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "client/custom-accounts-ui/helpers/login_buttons_session.js",
+			"settings":
+			{
+				"buffer_size": 3078,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 392.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"",
+				"Package Control: Install Package"
+			],
+			[
+				"package control: Install Package",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 416.0
+	},
+	"console":
+	{
+		"height": 139.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = '7183a2d3e96f11eeadd761d777e62404' + 'e330c659d4bb41d3bdf022e94cab3cd0'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://sublime.wbond.net/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by) "
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/home/solargreen/meteor/custom-accounts-ui"
+	],
+	"file_history":
+	[
+		"/home/solargreen/meteor/custom-accounts-ui/client/custom-accounts-ui/login_buttons_session.js",
+		"/home/solargreen/meteor/custom-accounts-ui/server/email.js",
+		"/home/solargreen/meteor/custom-accounts-ui/.meteorup/mup.json",
+		"/home/solargreen/meteor/custom-accounts-ui/collections/memberships.js",
+		"/home/solargreen/meteor/accounts-ui-test/packages/accounts-ui-bootstrap-3/login_buttons_dropdown.html",
+		"/home/solargreen/meteor/accounts-ui-test/packages/accounts-ui-bootstrap-3/login_buttons_dropdown.js",
+		"/home/solargreen/meteor/accounts-ui-test/packages/accounts-ui-bootstrap-3/login_buttons_session.js",
+		"/home/solargreen/meteor/accounts-ui-test/packages/accounts-ui-bootstrap-3/login_buttons.js",
+		"/home/solargreen/meteor/accounts-ui-test/packages/accounts-ui-bootstrap-3/login_buttons.html",
+		"/home/solargreen/meteor/custom-accounts-ui/customAccountsUI.sublime-project",
+		"/home/solargreen/Desktop/NOTES FOR OASIS TALK:",
+		"/home/solargreen/meteor/how-to-add-swap-on-ubuntu-14-04.htm",
+		"/home/solargreen/meteor/custom-accounts-ui/collections/sections.js",
+		"/home/solargreen/meteor/custom-accounts-ui/methods/getUsersInRole.js",
+		"/home/solargreen/meteor/OpenLabv2/methods/sortable1cMethods.js",
+		"/home/solargreen/meteor/custom-accounts-ui/methods/MatchHelpers.js",
+		"/home/solargreen/meteor/custom-accounts-ui/client/custom-accounts-ui/accounts_ui.styl",
+		"/home/solargreen/meteor/OpenLabv2/collections/blocks.js",
+		"/home/solargreen/meteor/custom-accounts-ui/server/users.js",
+		"/home/solargreen/meteor/custom-accounts-ui/client/custom-accounts-ui/validators.js",
+		"/home/solargreen/meteor/custom-accounts-ui/client/custom-accounts-ui/login_buttons.html",
+		"/home/solargreen/meteor/custom-accounts-ui/client/custom-accounts-ui/login_buttons_helpers.js",
+		"/home/solargreen/meteor/custom-accounts-ui/client/custom-accounts-ui.html",
+		"/home/solargreen/meteor/accounts-ui-test/packages/accounts-ui-bootstrap-3/accounts_ui.styl",
+		"/home/solargreen/meteor/custom-accounts-ui/client/custom-accounts-ui/login_buttons.js",
+		"/home/solargreen/meteor/accounts-ui-test/packages/accounts-ui-bootstrap-3/login_buttons_single.html",
+		"/home/solargreen/meteor/accounts-ui-test/packages/accounts-ui-bootstrap-3/login_buttons_dialogs.html",
+		"/home/solargreen/meteor/OpenLabv2/client/sortable1c/sortable1c.js",
+		"/home/solargreen/meteor/OpenLabv2/client/helpers/inEditedWall.js",
+		"/home/solargreen/meteor/OpenLabv2/lib/router.js",
+		"/home/solargreen/meteor/OpenLabv2/client/accountsui/accountsuiConfig.js",
+		"/home/solargreen/meteor/OpenLabv2/server/users.js",
+		"/home/solargreen/meteor/uploadsTest/lib/router.js",
+		"/home/solargreen/meteor/OpenLabv2/collections/activities.js",
+		"/home/solargreen/meteor/uploadsTest/collections/activities.js",
+		"/home/solargreen/meteor/OpenLabv2/client/stylesheets/application.css",
+		"/home/solargreen/meteor/OpenLabv2/client/stylesheets/summernote.css",
+		"/home/solargreen/meteor/OpenLabv2/client/stylesheets/activity_page.css",
+		"/home/solargreen/meteor/OpenLabv2/client/stylesheets/activities_list.css",
+		"/home/solargreen/meteor/OpenLabv2/client/pages/activity/column.js",
+		"/home/solargreen/meteor/OpenLabv2/client/pages/activity/column.html",
+		"/home/solargreen/meteor/OpenLabv2/client/pages/activity/activityPage.html",
+		"/home/solargreen/meteor/OpenLabv2/client/pages/activity/activityPage.js",
+		"/home/solargreen/meteor/OpenLabv2/client/pages/progressandplan/activities_list.js",
+		"/home/solargreen/meteor/OpenLabv2/client/pages/progressandplan/activities_list.html",
+		"/home/solargreen/meteor/OpenLabv2/client/pages/progressandplan/progressPlan.html",
+		"/home/solargreen/meteor/OpenLabv2/client/pages/progressandplan/progressPlanHeader.html",
+		"/home/solargreen/meteor/OpenLabv2/client/pages/progressandplan/progressPlan.js",
+		"/home/solargreen/meteor/OpenLabv2/client/pages/progressandplan/progressPlanHeader.js",
+		"/home/solargreen/meteor/OpenLabv2/client/stylesheets/plaintexteditor.css",
+		"/home/solargreen/meteor/OpenLabv2/client/plaintexteditor/plaintexteditor.js",
+		"/home/solargreen/meteor/OpenLabv2/client/helpers/roleHelpers.js",
+		"/home/solargreen/meteor/OpenLabv2/client/helpers/editingMainPage.js",
+		"/home/solargreen/meteor/OpenLabv2/client/plaintexteditor/plaintexteditor.html",
+		"/home/solargreen/meteor/OpenLabv2/client/pages/student/activities_list.js",
+		"/home/solargreen/meteor/OpenLabv2/client/pages/student/activities_list.html",
+		"/home/solargreen/meteor/OpenLabv2/client/pages/includes/student_header.html",
+		"/home/solargreen/meteor/OpenLabv2/client/pages/student/studentView.html",
+		"/home/solargreen/.config/sublime-text-3/Packages/User/Preferences.sublime-settings",
+		"/home/solargreen/meteor/OpenLabv2/collections/units.js",
+		"/home/solargreen/meteor/OpenLabv2/client/pages/includes/student_header.js",
+		"/home/solargreen/meteor/OpenLabv2/server/publications.js",
+		"/home/solargreen/meteor/OpenLabv2/client/helpers/editingProgressPage.js",
+		"/home/solargreen/meteor/OpenLabv2/collections/site.js",
+		"/home/solargreen/meteor/OpenLabv2/client/stylesheets/showhide.css",
+		"/home/solargreen/meteor/OpenLabv2/client/pages/application/layout.html",
+		"/home/solargreen/meteor/OpenLabv2/client/main.html",
+		"/home/solargreen/meteor/OpenLabv2/client/sortable1c/sortable1c.html",
+		"/home/solargreen/meteor/OpenLabv2/client/helpers/showHide.html",
+		"/home/solargreen/meteor/OpenLabv2/client/summernote/summernote.js",
+		"/home/solargreen/meteor/OpenLabv2/client/helpers/showHide.js",
+		"/home/solargreen/meteor/OpenLabv2/methods/showHideMethods.js",
+		"/home/solargreen/meteor/OpenLab/server/users.js",
+		"/home/solargreen/meteor/OpenLabv2/client/summernote/summernote.html",
+		"/home/solargreen/meteor/OpenLabv2/client/summernote/toolbars.js",
+		"/home/solargreen/meteor/OpenLabv2/client/helpers/alertOnError.js",
+		"/home/solargreen/meteor/OpenLabv2/client/stylesheets/xedit.css",
+		"/home/solargreen/meteor/OpenLabv2/client/pages/student/studentView.js",
+		"/home/solargreen/meteor/OpenLabv2/server/fixtures.js",
+		"/home/solargreen/meteor/OpenLabv2/client/views/student/activities_list.js",
+		"/home/solargreen/meteor/OpenLabv2/client/views/student/activities_list.html",
+		"/home/solargreen/meteor/OpenLabv2/client/views/student/studentView.html",
+		"/home/solargreen/meteor/OpenLabv2/collections/categories.js",
+		"/home/solargreen/meteor/OpenLab/collections/site.js",
+		"/home/solargreen/meteor/OpenLab/lib/router.js",
+		"/home/solargreen/meteor/OpenLab/server/fixtures.js",
+		"/home/solargreen/meteor/OpenLab/collections/users.js",
+		"/home/solargreen/meteor/OpenLab/client/views/includes/student_header.html",
+		"/home/solargreen/meteor/MeteorCheatSheet",
+		"/home/solargreen/meteor/OpenLabv2/methods/MatchHelpers.js",
+		"/home/solargreen/meteor/uploadsTest/client/helpers/showHide.html",
+		"/home/solargreen/meteor/uploadsTest/client/helpers/showHide.js",
+		"/home/solargreen/meteor/uploadsTest/client/helpers/inEditedWall.js",
+		"/home/solargreen/meteor/uploadsTest/client/summernote/summernote.js",
+		"/home/solargreen/meteor/uploadsTest/client/sortable1c/sortable1c.js",
+		"/home/solargreen/meteor/uploadsTest/client/pages/headers/activityHeader.html",
+		"/home/solargreen/meteor/uploadsTest/client/pages/activity/helpers/inEditedWall.js",
+		"/home/solargreen/meteor/uploadsTest/client/pages/activity/helpers/clipboard.js",
+		"/home/solargreen/meteor/uploadsTest/client/pages/activity/activityPage.js",
+		"/home/solargreen/meteor/uploadsTest/client/pages/activity/wall.js",
+		"/home/solargreen/meteor/uploadsTest/client/pages/activity/column.js",
+		"/home/solargreen/meteor/uploadsTest/collections/files.js",
+		"/home/solargreen/meteor/uploadsTest/client/helpers/alertOnError.js",
+		"/home/solargreen/meteor/uploadsTest/collections/blocks.js",
+		"/home/solargreen/meteor/uploadsTest/methods/sortable1cMethods.js",
+		"/home/solargreen/meteor/uploadsTest/methods/showHideMethods.js",
+		"/home/solargreen/meteor/uploadsTest/methods/MatchHelpers.js",
+		"/home/solargreen/meteor/uploadsTest/collections/walls.js",
+		"/home/solargreen/meteor/uploadsTest/collections/columns.js",
+		"/home/solargreen/meteor/uploadsTest/server/fixtures.js",
+		"/home/solargreen/meteor/uploadsTest/server/publications.js",
+		"/home/solargreen/meteor/uploadsTest/server/init.js",
+		"/home/solargreen/meteor/uploadsTest-deployment/mup.json",
+		"/home/solargreen/Desktop/dropped text.txt",
+		"/home/solargreen/meteor/uploadsTest/client/stylesheets/monokai.css",
+		"/home/solargreen/meteor/uploadsTest/client/pages/activity/wall.html",
+		"/home/solargreen/meteor/uploadsTest/client/pages/activity/activityPage.html",
+		"/home/solargreen/meteor/uploadsTest/client/pages/activity/imageBlockarchive.html",
+		"/home/solargreen/meteor/uploadsTest/client/summernote/summernote.html",
+		"/home/solargreen/meteor/uploadsTest/client/summernote/toolbars.js",
+		"/home/solargreen/meteor/uploadsTest/client/pages/activity/block.js",
+		"/home/solargreen/meteor/uploadsTest/client/sortable1c/sortable1c.html",
+		"/home/solargreen/meteor/uploadsTest/client/xedit/xedit.html",
+		"/home/solargreen/meteor/uploadsTest/client/xedit/xedit.js",
+		"/home/solargreen/meteor/uploadsTest/client/pages/activity/column.html",
+		"/home/solargreen/meteor/uploadsTest/client/summernote/plugin/summernote-ext-iframeTemplate.js",
+		"/home/solargreen/meteor/uploadsTest/client/summernote/plugin/summernote-ext-video.js",
+		"/home/solargreen/meteor/uploadsTest/client/summernote/plugin/summernote-ext-fontstyle.js"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"seciton",
+			"pei",
+			"inSig",
+			"loginButtonsSession",
+			"errorMess",
+			"Accounts._loginButtonsSession",
+			"loginButtonsSession",
+			"loginButtons",
+			"_loginButtons",
+			"_login",
+			"infoMessage",
+			"info",
+			"loginButtonsSession",
+			"loginorsignup",
+			"login()",
+			"logout",
+			"login-buttons-logout",
+			"errorFunction",
+			"dropdownV",
+			"toggle",
+			"ElementValuebyId",
+			"fields",
+			"theActivityID",
+			"i.fa",
+			"glyph",
+			":hover",
+			"editing",
+			"editingMainPageTF",
+			"editingMainPage",
+			"cursor:",
+			"active",
+			"Meteor.call",
+			"console.log",
+			"Meteor.call",
+			"'abc'",
+			"Meteor.Collection.ObjectID",
+			"inEdited",
+			"summernoteOptions",
+			"editing",
+			"blockTitle",
+			"editing",
+			"inEditedWall()",
+			"editing",
+			"inEditedWall",
+			"inEditedWall()",
+			"fileCount",
+			"Session.get('editedWall')",
+			"cursor: p",
+			".block",
+			"block",
+			"block-",
+			" p ",
+			"p ",
+			"summernote",
+			"bg-",
+			"position",
+			".inEditedWall",
+			"console.log",
+			".editTitle",
+			"fontsize",
+			"this.fontsize",
+			"styleWithSpan",
+			"');\n",
+			"inEditedWall",
+			"icon-list",
+			"list",
+			"button",
+			"parentData",
+			"btn",
+			"columnd",
+			"section",
+			">\n",
+			"inclass",
+			"#todos",
+			".todos",
+			"mostRecentLoMs",
+			"mostRecent",
+			"#assessmentV",
+			".newL",
+			"#assessmentVersion",
+			"ui-state-highlight",
+			"ui-state",
+			"creator",
+			"tab-",
+			"modal",
+			".Mo",
+			"sortable",
+			".sortable",
+			" e ",
+			"(e)",
+			".saveNewAssessment",
+			"newAssessment.description =",
+			"description",
+			"if (newAssessment",
+			"type",
+			"modal",
+			"teacherViewAS",
+			"UI.get",
+			"UI",
+			"modal",
+			"newLoM",
+			"#addAssessmentDialog",
+			"#standards",
+			"sortable",
+			"sort",
+			"max-height",
+			"assessmentAct",
+			"#activityStan",
+			"background",
+			"#activityS",
+			"removePga",
+			"disabled",
+			":hover",
+			"attendance",
+			"TeacherViewAs",
+			"TVA",
+			"Model",
+			"sort",
+			"limit",
+			"inline-block",
+			"standard",
+			"sort:",
+			"TeacherViewAS",
+			"Note",
+			"author",
+			"student",
+			"currentG",
+			"userTo"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"loginButtonsSession",
+			"Accounts._loginButtonsSession",
+			"Meteor.Collection.ObjectID()"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "client/custom-accounts-ui/login_buttons.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4861,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4268,
+								4205
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 2244.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "client/custom-accounts-ui/login_buttons_dialogs.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1887,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								713,
+								713
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "client/custom-accounts-ui/i18n/en.i18n.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2326,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 969.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				}
+			]
+		},
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 3,
+					"file": "client/custom-accounts-ui/login_buttons.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 12836,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1081,
+								1081
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 255.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "client/custom-accounts-ui/login_buttons_dialogs.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3854,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1712,
+								1712
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 714.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "methods/MatchHelpers.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2485,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								483,
+								483
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "server/email.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 472,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "server/users.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3195,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2064,
+								2064
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 552.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "client/custom-accounts-ui/helpers/login_buttons_session.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3078,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								267,
+								267
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 25.0
+	},
+	"input":
+	{
+		"height": 33.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			],
+			[
+				1,
+				0,
+				2,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			0.5,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "customAccountsUI.sublime-project",
+	"replace":
+	{
+		"height": 64.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"",
+				"~/meteor/accounts-ui-test/accountsUIbootstrap3.sublime-project"
+			]
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": false,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 204.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

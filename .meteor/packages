@@ -11,3 +11,8 @@ twbs:bootstrap
 accounts-password
 stylus
 alanning:roles
+momentjs:moment
+dburles:mongo-collection-instances
+wizonesolutions:underscore-string
+email
+anti:i18n
