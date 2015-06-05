@@ -1,3 +1,7 @@
+  /**********************************/
+ /******* LOGIN BUTTONS ************/
+/**********************************/
+
 // events shared between loginButtonsLoggedOutDropdown and
 // loginButtonsLoggedInDropdown
 
@@ -22,6 +26,12 @@ Template.loginButtons.events({
   }  
 });
 
+//is this used?
+Template.loginButtons.toggleDropdown = function() {
+  toggleDropdown();
+  focusInput();
+};
+
   /**********************************/
  /******* LOG OUT DROPDOWN *********/
 /**********************************/
@@ -36,17 +46,23 @@ Template.logOutDropdown.events({
   'click #login-buttons-open-change-password': function(event,tmpl) {
     event.stopPropagation();
     loginButtonsSession.set('inChangePasswordFlow',true);
+  },
+  'click #login-buttons-logout-message-only-OK': function(event,tmpl) {
+    loginButtonsSession.closeDropdown();
   }
 })
 
-  /**********************************/
- /******* LOGIN BUTTONS ************/
-/**********************************/
+  /*********************************/
+ /******* LOG IN DROPDOWN *********/
+/*********************************/
 
-Template.loginButtons.toggleDropdown = function() {
-  toggleDropdown();
-  focusInput();
-};
+Template.logInDropdown.events({
+  'click #login-buttons-message-only-OK': function(event,tmpl) {
+    loginButtonsSession.closeDropdown();
+  }
+});
+
+
 
   /**********************************/
  /******* LOGIN FORM ***************/
@@ -310,9 +326,15 @@ Template.changePasswordForm.events({
 
 
 
-  //
-  // helpers
-  //
+        /********************************************/
+       /****************** HELPERS *****************/
+      /******** getVal, getTrimmedVal *************/
+     /********* errorMessage, infoMessage ********/
+    /***** toggleDropdown, focusInput ***********/
+   /*****      ... are these actually used? ****/
+  /*** login, forgotPassword, changePassword **/
+ /********************************************/
+
 
 var getVal = function(tmpl,id) {
   var $element = $(tmpl.find("#" + id));
@@ -390,6 +412,7 @@ var forgotPassword = function(event,tmpl) {
         errorMessage(error.reason || "Unknown error");
       } else {
         infoMessage('Email sent.');
+        loginButtonsSession.set('inMessageOnlyFlow',true);
       }
     });
   } else {
@@ -414,12 +437,7 @@ var changePassword = function(event,tmpl) {
       errorMessage(error.reason || "Unknown error");
     } else {
       loginButtonsSession.infoMessage('Password changed.');
-
-      // wait 3 seconds, then expire the msg
-      Meteor.setTimeout(function() {
-        loginButtonsSession.resetMessages();
-        loginButtonsSession.set('inChangePasswordFlow',false);
-      }, 3000);
+      loginButtonsSession.set('inMessageOnlyFlow',true);
     }
   });
 };

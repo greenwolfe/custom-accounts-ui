@@ -18,12 +18,16 @@
     </a>
     <div class="dropdown-menu">
       {{>loginButtonsMessages}}
-      {{#if inChangePasswordFlow}}
-        {{>changePasswordForm}}
+      {{#unless inMessageOnlyFlow}}
+        {{#if inChangePasswordFlow}}
+          {{>changePasswordForm}}
+        {{else}}
+          <button class="btn btn-default btn-block" id="login-buttons-open-change-password">Change Password</button>
+          <button class="btn btn-block btn-primary" id="login-buttons-logout">Sign out</button>
+        {{/if}}
       {{else}}
-        <button class="btn btn-default btn-block" id="login-buttons-open-change-password">Change Password</button>
-        <button class="btn btn-block btn-primary" id="login-buttons-logout">Sign out</button>
-      {{/if}}
+        <button class="btn btn-block btn-primary" id="login-buttons-logout-message-only-OK">OK</button>
+      {{/unless}}
     </div>
   </li>
 </template>
@@ -36,15 +40,19 @@
     </a>
     <div class="dropdown-menu">
       {{>loginButtonsMessages}}
-      {{#if inSignupFlow}}
-        {{>createAccountForm}}
-      {{else}}
-        {{#if inForgotPasswordFlow}}
-          {{>forgotPasswordForm}}
+      {{#unless inMessageOnlyFlow}}
+        {{#if inSignupFlow}}
+          {{>createAccountForm}}
         {{else}}
-          {{>loginForm}}
+          {{#if inForgotPasswordFlow}}
+            {{>forgotPasswordForm}}
+          {{else}}
+            {{>loginForm}}
+          {{/if}}
         {{/if}}
-      {{/if}}
+      {{else}}
+        <button class="btn btn-block btn-primary" id="login-buttons-message-only-OK">OK</button>
+      {{/unless}}
     </div>
   </li>
 </template>

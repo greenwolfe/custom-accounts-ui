@@ -12,13 +12,10 @@
 	"buffers":
 	[
 		{
-			"contents": "<template name=\"loginButtons\">\n  {{#if currentUser}}\n    {{#unless loggingIn}}\n      {{#with currentUser}}\n        {{#if inChangePasswordFlow}}\n          {{>changePasswordForm}}\n        {{else}}\n          {{>logOutDropdown}}\n        {{/if}}\n      {{/with}}\n    {{/unless}}\n  {{else}}\n    {{>logInDropdown}}\n  {{/if}}\n</template>\n\n<template name=\"logOutDropdown\">\n  <li id=\"login-dropdown-list\" class=\"dropdown\">\n    <a class=\"dropdown-toggle\" data-toggle=\"dropdown\">\n      {{{profile.firstName}}} {{{profile.lastName}}}\n      <b class=\"caret\"></b>\n    </a>\n    <div class=\"dropdown-menu\">\n      <button class=\"btn btn-default btn-block\" id=\"login-buttons-open-change-password\">Change Password</button>\n      <button class=\"btn btn-block btn-primary\" id=\"login-buttons-logout\">Sign out</button>\n    </div>\n  </li>\n</template>\n\n<template name=\"logInDropdown\">\n  <li id=\"login-dropdown-list\" class=\"dropdown\">\n    <a class=\"dropdown-toggle\" data-toggle=\"dropdown\">\n      Sign in/Join\n      <b class=\"caret\"></b>\n    </a>\n    <div class=\"dropdown-menu\">\n    {{>loginButtonsMessages}}\n    {{#if inSignupFlow}}\n      {{>createAccountForm}}\n    {{else}}\n      {{#if inForgotPasswordFlow}}\n        {{>forgotPasswordForm}}\n      {{else}}\n        {{>loginForm}}\n      {{/if}}\n    {{/if}}\n    </div>\n  </li>\n</template>\n\n<template name=\"loginForm\">\n  <input id=\"login-username-or-email\" type=\"usernameOrEmail\" placeholder=\"Username or Email\" class=\"form-control\" />\n  <input id=\"login-password\" type=\"password\" placeholder=\"Password\" class=\"form-control\" />\n\n  <button class=\"btn btn-primary col-xs-12 col-sm-12\" id=\"login-buttons-signin\" type=\"button\">Sign in</button>\n\n  <div id=\"login-other-options\">\n    <a id=\"forgot-password-link\" class=\"pull-left\" >Forgot password?</a>\n    <a id=\"signup-link\" class=\"pull-right\" >Create account</a>\n  </div>\n</template>\n\n<template name=\"createAccountForm\">\n  <input id=\"login-create-firstname\" type=\"text\" placeholder=\"First name\" class=\"form-control\" />\n  <input id=\"login-create-lastname\" type=\"text\" placeholder=\"Last name\" class=\"form-control\" />\n  <input id=\"login-create-username\" type=\"text\" placeholder=\"Username\" class=\"form-control\" />\n  <input id=\"login-create-email\" type=\"email\" placeholder=\"Email\" class=\"form-control\" />\n<!--  <input id=\"login-create-password\" type=\"password\" placeholder=\"Password\" class=\"form-control\" />\n  <input id=\"login-create-password-again\" type=\"password\" placeholder=\"Confirm Password\" class=\"form-control\" />-->\n  <select id=\"login-create-role\" type=\"role\" class=\"form-control\" required>\n    <option value=\"\" selected disabled>Choose role</option>\n    <option value=\"student\">Student</option>\n    <option value=\"teacher\">Teacher</option>\n    <option value=\"parentOrAdvisor\">Parent or Advisor</option>\n  </select>\n  <select id=\"login-create-section\" type=\"section\" class=\"form-control hidden\" required>\n    <option value=\"\" selected disabled>Choose section</option>\n    {{#each sections}}\n      <option value=\"{{_id}}\">{{{section}}}</option>\n    {{/each}}\n  </select>\n  <div id=\"login-create-choose-students\" class=\"hidden\">\n    <p>Please enter the names of students you would like to observe.</p>\n    <input class=\"form-control login-create-choose-student\" type=\"student\" placeholder=\"Firstname Lastname <Enter>\"  />\n    {{#each students}}\n      <input class=\"form-control login-create-choose-student\" type=\"student\" value=\"{{name}}\" placeholder=\"Firstname Lastname <Enter>\"/>\n    {{/each}}\n  </div>\n\n\n  <button class=\"btn btn-primary col-xs-12 col-sm-12\" id=\"login-buttons-create\" type=\"button\">Create</button>\n  <button class=\"btn btn-primary col-xs-12 col-sm-12\" id=\"login-buttons-cancel-create\" type=\"button\">Cancel</button>\n</template>\n\n<template name=\"forgotPasswordForm\">\n  <div class=\"login-form\">\n\n      <input id=\"forgot-password-email\" type=\"email\" placeholder=\"Email\" class=\"form-control\" />\n\n    <button class=\"btn btn-primary login-button-form-submit col-xs-12 col-sm-12\" id=\"login-buttons-forgot-password\">Reset password</button>\n    <button class=\"btn btn-primary col-xs-12 col-sm-12\" id=\"login-buttons-cancel-forgot-password\" type=\"button\">Cancel</button>\n  </div>\n</template>\n\n<template name=\"changePasswordForm\">\n  {{#each fields}}\n    {{> _loginButtonsFormField}}\n  {{/each}}\n  <button class=\"btn btn-block btn-primary\" id=\"login-buttons-do-change-password\">{{i18n 'loginButtonsChangePassword.submit'}}</button>\n  <button class=\"btn btn-block btn-default\" id=\"login-buttons-cancel-change-password\">{{i18n 'loginButtonsChangePassword.cancel'}}</button>\n</template>\n\n<!-- used in various places to display messages to user -->\n<template name=\"loginButtonsMessages\">\n  {{#if errorMessage}}\n    <div class=\"alert alert-danger\">{{errorMessage}}</div>\n  {{/if}}\n  {{#if infoMessage}}\n    <div class=\"alert alert-success no-margin\">{{infoMessage}}</div>\n  {{/if}}\n</template>",
 			"file": "client/custom-accounts-ui/login_buttons.html",
-			"file_size": 4891,
-			"file_write_time": 130778734171465137,
 			"settings":
 			{
-				"buffer_size": 4861,
+				"buffer_size": 5144,
 				"line_ending": "Unix"
 			}
 		},
@@ -26,7 +23,7 @@
 			"file": "client/custom-accounts-ui/login_buttons_dialogs.html",
 			"settings":
 			{
-				"buffer_size": 1887,
+				"buffer_size": 1882,
 				"line_ending": "Unix"
 			}
 		},
@@ -42,7 +39,7 @@
 			"file": "client/custom-accounts-ui/login_buttons.js",
 			"settings":
 			{
-				"buffer_size": 12836,
+				"buffer_size": 15414,
 				"line_ending": "Unix"
 			}
 		},
@@ -50,7 +47,7 @@
 			"file": "client/custom-accounts-ui/login_buttons_dialogs.js",
 			"settings":
 			{
-				"buffer_size": 3854,
+				"buffer_size": 3972,
 				"line_ending": "Unix"
 			}
 		},
@@ -434,15 +431,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 4861,
+						"buffer_size": 5144,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4268,
-								4205
+								4182,
+								4182
 							]
 						],
 						"settings":
@@ -452,10 +449,10 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 2244.0,
+						"translation.y": 1900.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
@@ -464,15 +461,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1887,
+						"buffer_size": 1882,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								713,
-								713
+								1761,
+								1761
 							]
 						],
 						"settings":
@@ -500,8 +497,8 @@
 						"selection":
 						[
 							[
-								0,
-								0
+								2277,
+								2277
 							]
 						],
 						"settings":
@@ -509,8 +506,8 @@
 							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
-						"translation.x": 0.0,
-						"translation.y": 969.0,
+						"translation.x": 95.0,
+						"translation.y": 1326.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 5,
@@ -528,15 +525,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 12836,
+						"buffer_size": 15414,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1081,
-								1081
+								10604,
+								10604
 							]
 						],
 						"settings":
@@ -546,10 +543,10 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 255.0,
+						"translation.y": 4522.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 0,
 					"type": "text"
 				},
 				{
@@ -558,15 +555,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3854,
+						"buffer_size": 3972,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1712,
-								1712
+								3821,
+								3821
 							]
 						],
 						"settings":
@@ -576,7 +573,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 714.0,
+						"translation.y": 918.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 3,
@@ -683,8 +680,8 @@
 						"selection":
 						[
 							[
-								267,
-								267
+								264,
+								264
 							]
 						],
 						"settings":
@@ -783,7 +780,7 @@
 		],
 		"width": 0.0
 	},
-	"selected_group": 0,
+	"selected_group": 1,
 	"settings":
 	{
 	},

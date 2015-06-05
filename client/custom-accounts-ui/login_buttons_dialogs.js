@@ -43,7 +43,7 @@ Template.setPasswordDialog.events({
 }) 
 
   /**********************************/
- /******* SET PASSWORD DIALOG ******/
+ /***** LOGIN MESSAGES DIALOG ******/
 /**********************************/
 
 Template.loginMessagesDialog.events({
@@ -113,9 +113,12 @@ var setPassword = function(event,tmpl) {
         errorMessage('Sorry, there was a problem resetting your password.');          
       }
     } else {
+      errorMessage('');
       infoMessage('Success!  Your password has been changed.');  // This doesn't show. Display on next page
       loginButtonsSession.set('enrollAccountToken', null);
       loginButtonsSession.set('resetPasswordToken',null);
+      $('#login-set-password-modal').modal('hide');
+      $('#login-messages-modal').modal();
       // Call done before navigating away from here
       if (doneCallback) {
         doneCallback();

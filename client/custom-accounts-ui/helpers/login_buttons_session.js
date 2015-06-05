@@ -7,7 +7,7 @@ var VALID_KEYS = [
   'inSignupFlow',
   'inForgotPasswordFlow',
   'inChangePasswordFlow',
-//  'inMessageOnlyFlow',
+  'inMessageOnlyFlow',
 
   'errorMessage',
   'infoMessage',
@@ -61,10 +61,10 @@ loginButtonsSession = {
   closeDropdown: function () {
     this.set('inSignupFlow', false);
     this.set('inForgotPasswordFlow', false);
-//    this.set('inChangePasswordFlow', false);
-//    this.set('inMessageOnlyFlow', false);
+    this.set('inChangePasswordFlow', false);
+    this.set('inMessageOnlyFlow', false);
     this.set('dropdownVisible', false);
-    this.set('childrenOrAdvisees', false);
+    this.set('childrenOrAdvisees', false); //still used?
     this.resetMessages();
   },
 
