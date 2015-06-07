@@ -21,10 +21,13 @@
       {{#unless inMessageOnlyFlow}}
         {{#if inChangePasswordFlow}}
           {{>changePasswordForm}}
+        {{else}} {{#if inEditProfileFlow}}
+          {{>editProfileForm}}
         {{else}}
-          <button class="btn btn-default btn-block" id="login-buttons-open-change-password">Change Password</button>
+          <button class="btn btn-primary btn-block" id="login-buttons-edit-profile">Edit Profile</button>
+          <button class="btn btn-primary btn-block" id="login-buttons-open-change-password">Change Password</button>
           <button class="btn btn-block btn-primary" id="login-buttons-logout">Sign out</button>
-        {{/if}}
+        {{/if}} {{/if}}
       {{else}}
         <button class="btn btn-block btn-primary" id="login-buttons-logout-message-only-OK">OK</button>
       {{/unless}}
@@ -90,12 +93,11 @@
   </select>
   <div id="login-create-choose-students" class="hidden">
     <p>Please enter the names of students you would like to observe.</p>
-    <input class="form-control login-create-choose-student" type="student" placeholder="Firstname Lastname <Enter>"  />
     {{#each students}}
       <input class="form-control login-create-choose-student" type="student" value="{{name}}" placeholder="Firstname Lastname <Enter>"/>
     {{/each}}
+    <input class="form-control login-create-choose-student" type="student" placeholder="Firstname Lastname <Enter>"  />
   </div>
-
 
   <button class="btn btn-primary col-xs-12 col-sm-12" id="login-buttons-create" type="button">Create</button>
   <button class="btn btn-primary col-xs-12 col-sm-12" id="login-buttons-cancel-create" type="button">Cancel</button>
@@ -120,6 +122,77 @@
     <button class="btn btn-block btn-primary" id="login-buttons-do-change-password">Change password</button>
     <button class="btn btn-block btn-default" id="login-buttons-cancel-change-password">Cancel</button>
   </div>
+</template>
+
+<template name="editProfileForm">
+  <div class="form-group">
+    Name: <input id="edit-profile-firstname" type="text" value={{profile.firstName}} class="form-control" />
+    <input id="edit-profile-lastname" type="text" value={{profile.lastName}} class="form-control" />
+  </div> 
+  <div class="form-group">
+    Username: 
+    <input id="edit-profile-username" type="text" value={{username}} class="form-control" />
+  </div>
+  <div class="form-group">
+    Email: 
+    {{#each emails}}
+      <p>
+        {{address}}
+        {{#unless verified}}
+            <a href="#" class="glyphicon glyphicon-remove remove-email" title="stop observing"></a>
+        {{/unless}}
+      </p>
+    {{/each}}
+    {{#each newEmails}}
+      <input class="form-control edit-profile-add-email" type="email" value="{{address}}" placeholder="Add another email."/>
+    {{/each}}
+    <input class="form-control edit-profile-add-email" type="email" placeholder='Add another email.'>
+  </div>
+  {{#if isInRole 'teacher'}} <!-- and if viewing as another user -->
+    <select id="edit-profile-role" type="role" class="form-control" required>
+      <option value="student" {{roleSelected 'student'}}>Student</option>
+      <option value="teacher" {{roleSelected 'teacher'}}>Teacher</option>
+      <option value="parentOrAdvisor" {{roleSelected 'parentOrAdvisor'}}>Parent or Advisor</option>
+    </select>
+  {{/if}}
+  {{#if isInRole 'student'}}
+    Section:
+    <select id="edit-profile-section" type="section" class="form-control" required>
+        <option value="" {{noSectionSelected}} disabled>Choose section</option>
+      {{#each sections}}
+        <option value="{{_id}}" {{sectionSelected}}>{{{section}}}</option>
+      {{/each}}
+    </select>
+  {{/if}}
+  {{#if isInRole 'parentOrAdvisor'}}
+    <div class="form-group">
+      Students you are observing:
+      {{#each verifiedStudents}}
+        <p> 
+          {{name}} 
+          <a href="#" class="glyphicon glyphicon-remove stop-observing" title="stop observing"></a>
+        </p>
+      {{/each}}
+
+      {{#if unverifiedStudents}}
+        Requests pending approval: 
+        {{#each unverifiedStudents}}
+          <p> 
+            {{name}} 
+            <a href="#" class="glyphicon glyphicon-remove stop-observing" title="stop observing"></a>  
+          </p>  
+        {{/each}}
+      {{/if}}
+      {{#each newStudents}}
+        <input class="form-control edit-profile-choose-student" type="student" value="{{name}}" placeholder="Firstname Lastname <Enter>"/>
+      {{/each}}
+      <input class="form-control edit-profile-choose-student" type="student" placeholder="Firstname Lastname <Enter>"  />
+    </div>
+  {{/if}}
+
+
+  <button class="btn btn-primary col-xs-12 col-sm-12" id="edit-profile-save" type="button">Save Changes</button>
+  <button class="btn btn-primary col-xs-12 col-sm-12" id="edit-profile-cancel" type="button">Cancel</button>
 </template>
 
 <!-- used in various places to display messages to user -->

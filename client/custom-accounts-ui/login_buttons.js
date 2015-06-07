@@ -39,7 +39,6 @@ Template.loginButtons.toggleDropdown = function() {
 Template.logOutDropdown.events({
   'click #login-buttons-logout': function(event,tmpl) {
     Meteor.logout(function(error) {
-      console.log(error);
       loginButtonsSession.closeDropdown();
     });
   },
@@ -49,6 +48,10 @@ Template.logOutDropdown.events({
   },
   'click #login-buttons-logout-message-only-OK': function(event,tmpl) {
     loginButtonsSession.closeDropdown();
+  },
+  'click #login-buttons-edit-profile': function(event,tmpl) {
+    event.stopPropagation();
+    loginButtonsSession.set('inEditProfileFlow',true);
   }
 })
 
@@ -95,10 +98,10 @@ Template.loginForm.events({
 
     // update new fields with appropriate defaults
     if (usernameOrEmail){
-      if (usernameOrEmail.indexOf('@') === -1){
-        $('#login-create-username').val(usernameOrEmail);
-      } else {
+      if (Match.test(usernameOrEmail,Match.email)) {
         $('#login-create-email').val(usernameOrEmail);
+      } else {
+        $('#login-create-username').val(usernameOrEmail);
       }
     }
 //    if (password)
@@ -116,7 +119,7 @@ Template.loginForm.events({
     
     Meteor.flush();
 
-    if ((usernameOrEmail) && (usernameOrEmail.indexOf('@') > 0))
+    if ((usernameOrEmail) && Match.test(usernameOrEmail,Match.email))
         $('#forgot-password-email').val(usernameOrEmail);
   }
 });
@@ -189,83 +192,13 @@ Template.createAccountForm.events({
   },
   'click #login-buttons-create': function(event,tmpl) {
     event.stopPropagation();
-    loginButtonsSession.resetMessages();
-    //loginButtonsSession.infoMessage('heres some info');
-
-    // to be passed to Accounts.createUser
-    var options = {};
-    options.username = getTrimmedVal(tmpl,'login-create-username');
-      if (!Match.test(options.username,Match.nonEmptyString)) return errorMessage('You must specify a username.');
-      if (options.username.length > 12)  return errorMessage('Keep your user name short (12 characers or less) but unique and recognizable.');
-    options.profile = {};
-    options.profile.firstName = getTrimmedVal(tmpl,'login-create-firstname');
-      if (!Match.test(options.profile.firstName,Match.nonEmptyString)) return errorMessage('Please enter your first name.');
-    options.profile.lastName = getTrimmedVal(tmpl,'login-create-lastname');
-      if (!Match.test(options.profile.lastName,Match.nonEmptyString)) return errorMessage('Please enter your last name.');
-
-    options.email = getTrimmedVal(tmpl,'login-create-email');
-      if (!Match.test(options.email,Match.email)) return errorMessage('Enter a valid e-mail address.');
-//    options.password = getVal(tmpl,'login-create-password');
-//      if (!Match.test(options.password,Match.password)) return errorMessage('Passwords must be at least 8 characters long and contain one lowercase letter, one uppercase letter, and one digit or special character (@#$%^&+=_-)')
-//    var confirm = getVal(tmpl,'login-create-password-again');
-//      if (confirm != options.password) return errorMessage("Passwords don't match.");
-
-    var pEi = {}; //post Enrollment info
-    pEi.role = $(tmpl.find('#login-create-role')).val();
-      if (!Match.test(pEi.role,Match.OneOf('student','teacher','parentOrAdvisor'))) return errorMessage("You must select a role.");
-      if (pEi.role == 'student') {
-        pEi.sectionID = $(tmpl.find('#login-create-section')).val();
-        if (!Match.test(pEi.sectionID,Match.idString)) return errorMessage("You must choose a section.");
-        var section = Sections.findOne(pEi.sectionID);
-        if (!section) return errorMessage("Invalid section.");
-      } else if (pEi.role == 'parentOrAdvisor') {
-        pEi.childrenOrAdvisees = [];
-        tmpl.$('.login-create-choose-student').each(function(i,s) {
-          var cleanValue = _.clean(s.value);
-          if (cleanValue) {
-            pEi.childrenOrAdvisees.push(cleanValue);
-          }
-        })
-//        options.profile.childrenOrAdvisees = childrenOrAdvisees;
-      } 
-      //currently no extra fields for teacher
-      options.profile.postEnrollmentInfo = pEi;
-
-      Meteor.call('createUnvalidatedUser',options,function(error) {
-        if (error) {
-          errorMessage(error.reason || "Unknown error creating user.");
-        } else {
-          infoMessage('Once a teacher validates your information, you will receive an e-mail with a link to set your password and activate your account.')
-          $('#login-messages-modal').modal();
-          loginButtonsSession.set('inSignupFlow',false);
-          loginButtonsSession.set('inForgotPasswordFlow', false);
-          Template.loginButtons.toggleDropdown();
-        }
-      })
-/*    Accounts.createUser(options, function(error) {
-      if (error) {
-        errorMessage(error.reason || "Unknown error creating user.");
-      } else {
-        userID = Meteor.userId();
-        Meteor.call('assignRole',userID,role,function(error,userID) {
-          if (error) {
-            errorMessage(error.reason || "Unknown error assignint role.");
-          } else {
-            if (role == 'student') {
-              Meteor.call('addMember',{
-                member: userID,
-                in: sectionID,
-                of: 'Sections'
-              },function(error,id) {
-                if (error)
-                  errorMessage(error.reason || "Unknown error assigning user to role.")
-              })
-            }            
-          }
-        });
-        loginButtonsSession.closeDropdown();
-      }
-    });*/
+    createUser(event,tmpl);
+  },
+  "keypress .form-control[type!='role'][type!='section'][type!='student']": function(event,tmpl) {
+    event.stopPropagation();
+    if (event.keyCode === 13) {
+      createUser(event,tmpl);
+    } 
   }
 });
 
@@ -324,16 +257,154 @@ Template.changePasswordForm.events({
   }
 });
 
+  /********************************/
+ /******* EDIT PROFILE FORM ******/
+/********************************/
+
+Template.editProfileForm.helpers({
+  sections: function() {
+    return Sections.find();
+  },
+  sectionSelected: function () {
+    var cS = currentSection();
+    return ((cS) && (this._id == cS._id)) ? 'selected' : '';
+  },
+  noSectionSelected: function() {
+    var cS = currentSection();
+    return (cS) ? '' : 'selected';
+  },
+  verifiedStudents: function() {
+    var cU = Meteor.user();
+    if (!Roles.userIsInRole(cU._id,'parentOrAdvisor'))
+      return '';
+    var cOA = [];
+    var students = cU.profile.childrenOrAdvisees || '';
+    if (students) {
+      students.forEach(function(studentID,index,students) {
+        var student = Meteor.users.findOne(studentID);
+        if (student) {
+          var name = (student.profile.firstName + ' ' + student.profile.lastName) || student.userName || 'Name not found?';
+          student.name = name;
+          cOA.push(student);
+        }
+      });
+    }
+    return cOA;
+  },
+  unverifiedStudents: function() {
+    var cU = Meteor.user();
+    if (!Roles.userIsInRole(cU._id,'parentOrAdvisor'))
+      return '';
+    var cOA = [];
+    var students = cU.profile.childrenOrAdvisees || '';
+    if (students) {
+      students.forEach(function(studentID,index,students) {
+        var student = Meteor.users.findOne(studentID);
+        if (!student) {
+          student = {_id: studentID, name: studentID};
+          cOA.push(student);
+        }
+      });
+    }
+    return cOA;
+  },
+  newStudents: function() {
+    var childrenOrAdvisees = loginButtonsSession.get('childrenOrAdvisees');
+    if (!childrenOrAdvisees) return '';
+    return childrenOrAdvisees.map(function(student) {
+      return {name:student};
+    });
+  },
+  newEmails: function() {
+    var newEmails = loginButtonsSession.get('newEmails');
+    if (!newEmails) return '';
+    return newEmails.map(function(email) {
+      return {address:email,verified:false};
+    });
+  },
+  roleSelected: function(role) {
+    var cU = Meteor.user(); //or ViewAs
+    return Roles.userIsInRole(cU,role) ? 'selected' : '';
+  }
+})
+
+Template.editProfileForm.events({
+  "keypress .form-control[type!='student'][type!='email']": function(event,tmpl) {
+    event.stopPropagation();
+    if (event.keyCode === 13){
+      updateProfile(event,tmpl);
+    } 
+  },
+  'keypress .edit-profile-choose-student': function(event,tmpl) {
+    if (event.keyCode === 13){
+      var childrenOrAdvisees = [];
+      tmpl.$('.edit-profile-choose-student').each(function(i,s) {
+        var cleanValue = _.clean(s.value);
+        if (cleanValue) {
+          childrenOrAdvisees.push(cleanValue);
+        }
+      })
+      loginButtonsSession.set('childrenOrAdvisees',childrenOrAdvisees);
+      $(event.target).val('');
+    }
+  },
+  'keypress .edit-profile-add-email': function(event,tmpl) {
+    if (event.keyCode === 13){
+      var emails = [];
+      tmpl.$('.edit-profile-add-email').each(function(i,s) {
+        if (s.value) {
+          emails.push(s.value);
+        }
+      })
+      loginButtonsSession.set('newEmails',emails);
+      $(event.target).val('');
+    }
+  },
+  'click .remove-email': function(event,tmpl) {
+    event.stopPropagation();
+    var cU = Meteor.userId(); //or viewAs
+    Meteor.call('removeEmail',cU,this.address,function(error,id) {
+      if (error) {
+        errorMessage(error.reason || 'Could not remove e-mail.  Unknown error.')
+      } else {
+        infoMessage('Email successfully removed.');
+      }
+    });
+  },
+  'click #edit-profile-save': function(event,tmpl) {
+    event.stopPropagation();
+    updateProfile(event,tmpl);
+  },
+  'click #edit-profile-cancel': function(event,tmpl) {
+    event.stopPropagation();
+    loginButtonsSession.resetMessages();
+    loginButtonsSession.set('inEditProfileFlow',false);
+  },
+  'click .stop-observing': function(event,tmpl) {
+    event.stopPropagation();
+    var cU = Meteor.userId(); //or viewAs
+    var successMessage = (Match.test(this._id,Match.idString)) ? 'You have stopped observing ' : 'You have withdrawn your request to observe ';
+    successMessage += this.name + '.';
+    Meteor.call('removeChildOrAdvisee',cU,this._id,function(error,id) {
+      if (error) {
+        errorMessage(error.reason || 'Could not remove child or advisee.  Unknown error.')
+      } else {
+        infoMessage(successMessage);
+      }
+    });
+  },
+})
 
 
-        /********************************************/
-       /****************** HELPERS *****************/
-      /******** getVal, getTrimmedVal *************/
-     /********* errorMessage, infoMessage ********/
-    /***** toggleDropdown, focusInput ***********/
-   /*****      ... are these actually used? ****/
+
+       /********************************************/
+      /****************** HELPERS *****************/
+     /******** getVal, getTrimmedVal *************/
+    /********* errorMessage, infoMessage ********/
+   /***** toggleDropdown, focusInput ***********/
   /*** login, forgotPassword, changePassword **/
- /********************************************/
+ /*** updateProfile **************************/
+/********************************************/
 
 
 var getVal = function(tmpl,id) {
@@ -374,6 +445,10 @@ var focusInput = function() {
   }, 0);
 };
 
+  /********************/
+ /****** login *******/
+/********************/
+
 var login = function(event,tmpl) {
   loginButtonsSession.resetMessages();
   //loginButtonsSession.infoMessage('heres some info');
@@ -400,25 +475,39 @@ var login = function(event,tmpl) {
   });
 }
 
+  /******************************/
+ /****** forgot password *******/
+/******************************/
+
 var forgotPassword = function(event,tmpl) {
   loginButtonsSession.resetMessages();
 
   var email = getTrimmedVal(tmpl,'forgot-password-email');
-  if (email.indexOf('@') !== -1) {
-    Accounts.forgotPassword({
-      email: email
-    }, function(error) {
-      if (error) {
-        errorMessage(error.reason || "Unknown error");
+  Meteor.call('isEmailVerified',email,function(error,isVerified) {
+    if (error) {
+      errorMessage(error.reason || 'Email not found. No user on the system has registered this email.')
+    } else {
+      if (isVerified) {
+        Accounts.forgotPassword({
+          email: email
+        }, function(error) {
+          if (error) {
+            errorMessage(error.reason || "Unknown error");
+          } else {
+            infoMessage('Email sent.');
+            loginButtonsSession.set('inMessageOnlyFlow',true);
+          }
+        })
       } else {
-        infoMessage('Email sent.');
-        loginButtonsSession.set('inMessageOnlyFlow',true);
+        errorMessage('This email has not been verified.  To reset your password, you must use the email you verified when you created your account.')
       }
-    });
-  } else {
-    errorMessage('Invalid email');
-  }
+    }
+  })
 };
+
+  /******************************/
+ /****** change password *******/
+/******************************/
 
 var changePassword = function(event,tmpl) {
   loginButtonsSession.resetMessages();
@@ -441,3 +530,133 @@ var changePassword = function(event,tmpl) {
     }
   });
 };
+
+  /**************************/
+ /****** create user *******/
+/**************************/
+
+var createUser = function(event,tmpl) {
+  loginButtonsSession.resetMessages();
+
+  // to be passed to Accounts.createUser
+  var options = {};
+  options.username = getTrimmedVal(tmpl,'login-create-username');
+    if (!Match.test(options.username,Match.nonEmptyString)) return errorMessage('You must specify a username.');
+    if (options.username.length > 12)  return errorMessage('Keep your user name short (12 characers or less) but unique and recognizable.');
+  options.profile = {};
+  options.profile.firstName = getTrimmedVal(tmpl,'login-create-firstname');
+    if (!Match.test(options.profile.firstName,Match.nonEmptyString)) return errorMessage('Please enter your first name.');
+  options.profile.lastName = getTrimmedVal(tmpl,'login-create-lastname');
+    if (!Match.test(options.profile.lastName,Match.nonEmptyString)) return errorMessage('Please enter your last name.');
+
+  options.email = getTrimmedVal(tmpl,'login-create-email');
+    if (!Match.test(options.email,Match.email)) return errorMessage('Enter a valid e-mail address.');
+//    options.password = getVal(tmpl,'login-create-password');
+//      if (!Match.test(options.password,Match.password)) return errorMessage('Passwords must be at least 8 characters long and contain one lowercase letter, one uppercase letter, and one digit or special character (@#$%^&+=_-)')
+//    var confirm = getVal(tmpl,'login-create-password-again');
+//      if (confirm != options.password) return errorMessage("Passwords don't match.");
+
+  var pEi = {}; //post Enrollment info
+  pEi.role = $(tmpl.find('#login-create-role')).val();
+    if (!Match.test(pEi.role,Match.OneOf('student','teacher','parentOrAdvisor'))) return errorMessage("You must select a role.");
+    if (pEi.role == 'student') {
+      pEi.sectionID = $(tmpl.find('#login-create-section')).val();
+      if (!Match.test(pEi.sectionID,Match.idString)) return errorMessage("You must choose a section.");
+      var section = Sections.findOne(pEi.sectionID);
+      if (!section) return errorMessage("Invalid section.");
+    } else if (pEi.role == 'parentOrAdvisor') {
+      pEi.childrenOrAdvisees = [];
+      tmpl.$('.login-create-choose-student').each(function(i,s) {
+        var cleanValue = _.clean(s.value);
+        if (Match.test(cleanValue,Match.nonEmptyString)) {
+          pEi.childrenOrAdvisees.push(cleanValue);
+        }
+      })
+    } 
+  //currently no extra fields for teacher
+  options.profile.postEnrollmentInfo = pEi;
+
+  Meteor.call('createUnvalidatedUser',options,function(error) {
+    if (error) {
+      errorMessage(error.reason || "Unknown error creating user.");
+    } else {
+      infoMessage('Once a teacher validates your information, you will receive an e-mail with a link to set your password and activate your account.')
+      $('#login-messages-modal').modal();
+      loginButtonsSession.set('inSignupFlow',false);
+      loginButtonsSession.set('inForgotPasswordFlow', false);
+      Template.loginButtons.toggleDropdown();
+    }
+  })
+}
+
+  /*****************************/
+ /****** update profile *******/
+/*****************************/
+
+var updateProfile = function(event,tmpl) {
+  loginButtonsSession.resetMessages();
+
+  // to be passed to updateUser or ...
+  var cU = Meteor.user();//or viewAs
+  var user = {
+    _id:cU._id,
+    profile:{}
+  }; 
+  var username = getTrimmedVal(tmpl,'edit-profile-username');
+    if (!Match.test(username,Match.nonEmptyString)) return errorMessage('You must specify a username.');
+    if (username.length > 12)  return errorMessage('Keep your user name short (12 characers or less) but unique and recognizable.');
+    if (username != cU.username) user.username = username;
+  var firstName = getTrimmedVal(tmpl,'edit-profile-firstname');
+    if (!Match.test(firstName,Match.nonEmptyString)) return errorMessage('Please enter your first name.');
+    if (firstName != cU.profile.firstName) user.profile.firstName = firstName;
+  var lastName = getTrimmedVal(tmpl,'edit-profile-lastname');
+    if (!Match.test(lastName,Match.nonEmptyString)) return errorMessage('Please enter your last name.');
+    if (lastName != cU.profile.lastName) user.profile.lastName = lastName;
+  user.emails = [];
+  tmpl.$('.edit-profile-add-email').each(function(i,s) {
+    var email = s.value;
+    if (Match.test(email,Match.nonEmptyString)) {
+      if (!Match.test(email,Match.email)) return errorMessage('Enter a valid e-mail address.');
+      user.emails.push(email);
+    }    
+  });
+
+  var pEi = {}; //post Enrollment info ... is there a better name for this here?
+    if (Roles.userIsInRole(cU,'teacher')) { 
+      var role = tmpl.$('#edit-profile-role').val();
+      if (!Match.test(role,Match.OneOf('student','teacher','parentOrAdvisor'))) return errorMessage("You must select a role.");
+        if (!Roles.userIsInRole(cU,role) /*&& check if user is teacher?*/) 
+          pEi.role = role;
+    } else if (Roles.userIsInRole(cU,'student')) {
+      var sectionID = $(tmpl.find('#edit-profile-section')).val();
+      if (!Match.test(sectionID,Match.idString)) return errorMessage("You must choose a section.");
+      var section = Sections.findOne(sectionID);
+      if (!section) return errorMessage("Invalid section.");
+      var cS = currentSection();
+      if ((!cS) || (sectionID != cS._id))
+        pEi.sectionID = sectionID;
+    } else if (Roles.userIsInRole(cU,'parentOrAdvisor')) {
+      pEi.childrenOrAdvisees = [];
+      tmpl.$('.edit-profile-choose-student').each(function(i,s) {
+        var cleanValue = _.clean(s.value);
+        if (Match.test(cleanValue,Match.nonEmptyString)) {
+          pEi.childrenOrAdvisees.push(cleanValue);
+        }
+      })
+    } 
+  user.profile.postEnrollmentInfo = pEi; 
+
+  Meteor.call('updateUser',user,function(error,userID) {
+    if (error) {
+      errorMessage(error.reason || 'Unknown error updating profile.');
+    } else {
+      Meteor.flush();
+      infoMessage('Profile successfully updated.');
+      loginButtonsSession.set('newEmails',null);
+      loginButtonsSession.set('childrenOrAdvisees',null);
+      $('.edit-profile-choose-student').val('');
+      $('.edit-profile-add-email').val('');
+    }
+  });
+
+}

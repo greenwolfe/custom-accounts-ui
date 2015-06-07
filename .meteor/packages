@@ -16,3 +16,4 @@ dburles:mongo-collection-instances
 wizonesolutions:underscore-string
 email
 anti:i18n
+zuuk:stale-session

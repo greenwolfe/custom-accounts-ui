@@ -12,7 +12,6 @@ Meteor.methods({
     membership.from = membership.from || new Date();
     membership.to = membership.to || new Date(8630000000000000); //new Date(8640000000000000) =  Sat Sep 13 275760 01:00:00 GMT+0100 (BST) and is the maximum possible javascript Date
 
-    console.log(membership);
     var Collection = Mongo.Collection.get(membership.of);
     var item = Collection.findOne(membership.in);
     if (!item)
@@ -21,9 +20,12 @@ Meteor.methods({
     if (!member)
       throw new Meteor.Error('user-not-found', "Cannot add member.  User not found.");
 
-    //check for past memberships?
-    //currently deciding not to do so, so that membership record is complete
-    //may need to create some utilities to search records
+    //deactivate any past memberships before adding new membership
+    var today = new Date();
+    Memberships.find({member:membership.member,of:membership.of}).forEach(function(mship){
+      if (mship.to > today) 
+        Memberships.update(mship._id,{$set:{to:today}})
+    })
 
     return Memberships.insert(membership);
   },
@@ -36,10 +38,8 @@ Meteor.methods({
     //don't delete membership, rather set to field to one minute ago
     //keeps membership record, while indicating that member is no longer
     //in this group
-    return Memberships.update({
-      _id:membershipID,
-      to: moment(new Date()).subtract(1,'m').toDate()
-    })
+    var today = new Date();
+    return Memberships.update(membershipID,{$set: {to: today}})
   },
   changeMembershipDates: function(membershipID,from,to) {
     check(membershipID,Match.idString);

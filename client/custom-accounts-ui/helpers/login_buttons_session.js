@@ -8,10 +8,12 @@ var VALID_KEYS = [
   'inForgotPasswordFlow',
   'inChangePasswordFlow',
   'inMessageOnlyFlow',
+  'inEditProfileFlow',
 
   'errorMessage',
   'infoMessage',
-  'childrenOrAdvisees', 
+  'childrenOrAdvisees',
+  'newEmails', 
 
   // dialogs with messages (info and error)
   'resetPasswordToken',
@@ -63,8 +65,10 @@ loginButtonsSession = {
     this.set('inForgotPasswordFlow', false);
     this.set('inChangePasswordFlow', false);
     this.set('inMessageOnlyFlow', false);
+    this.set('inEditProfileFlow',false);
     this.set('dropdownVisible', false);
-    this.set('childrenOrAdvisees', false); //still used?
+    this.set('childrenOrAdvisees', false); 
+    this.set('newEmails',false);
     this.resetMessages();
   },
 
