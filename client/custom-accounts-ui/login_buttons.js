@@ -270,8 +270,7 @@ Template.editProfileForm.helpers({
     return ((cS) && (this._id == cS._id)) ? 'selected' : '';
   },
   noSectionSelected: function() {
-    var cS = currentSection();
-    return (cS) ? '' : 'selected';
+    return (currentSection()) ? '' : 'selected';
   },
   verifiedStudents: function() {
     var cU = Meteor.user();

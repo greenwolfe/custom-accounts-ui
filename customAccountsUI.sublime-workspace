@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"loginB",
+				"loginButtonsSession"
+			],
+			[
 				"border-",
 				"border-width"
 			]
@@ -12,10 +16,18 @@
 	"buffers":
 	[
 		{
+			"file": "lib/Router.js",
+			"settings":
+			{
+				"buffer_size": 612,
+				"line_ending": "Unix"
+			}
+		},
+		{
 			"file": "client/custom-accounts-ui/login_buttons.html",
 			"settings":
 			{
-				"buffer_size": 7745,
+				"buffer_size": 8583,
 				"line_ending": "Unix"
 			}
 		},
@@ -36,10 +48,34 @@
 			}
 		},
 		{
+			"file": "client/views/progressPlan/custom-accounts-ui.html",
+			"settings":
+			{
+				"buffer_size": 209,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "client/views/application/layout.html",
+			"settings":
+			{
+				"buffer_size": 183,
+				"line_ending": "Unix"
+			}
+		},
+		{
 			"file": "client/custom-accounts-ui/login_buttons.js",
 			"settings":
 			{
-				"buffer_size": 17224,
+				"buffer_size": 23118,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "client/views/progressPlan/custom-accounts-ui.css",
+			"settings":
+			{
+				"buffer_size": 31,
 				"line_ending": "Unix"
 			}
 		},
@@ -47,7 +83,15 @@
 			"file": "server/users.js",
 			"settings":
 			{
-				"buffer_size": 3752,
+				"buffer_size": 8716,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "server/publications.js",
+			"settings":
+			{
+				"buffer_size": 432,
 				"line_ending": "Unix"
 			}
 		},
@@ -55,15 +99,15 @@
 			"file": "collections/memberships.js",
 			"settings":
 			{
-				"buffer_size": 2198,
+				"buffer_size": 2282,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "methods/MatchHelpers.js",
+			"file": "client/custom-accounts-ui/helpers/membership_helpers.js",
 			"settings":
 			{
-				"buffer_size": 2485,
+				"buffer_size": 1295,
 				"line_ending": "Unix"
 			}
 		},
@@ -79,7 +123,7 @@
 			"file": "client/custom-accounts-ui/helpers/login_buttons_session.js",
 			"settings":
 			{
-				"buffer_size": 3150,
+				"buffer_size": 3185,
 				"line_ending": "Unix"
 			}
 		}
@@ -127,16 +171,17 @@
 	[
 		"/home/solargreen/meteor/custom-accounts-ui",
 		"/home/solargreen/meteor/custom-accounts-ui/client",
-		"/home/solargreen/meteor/custom-accounts-ui/client/custom-accounts-ui",
-		"/home/solargreen/meteor/custom-accounts-ui/client/custom-accounts-ui/helpers",
-		"/home/solargreen/meteor/custom-accounts-ui/collections",
-		"/home/solargreen/meteor/custom-accounts-ui/methods",
-		"/home/solargreen/meteor/custom-accounts-ui/server"
+		"/home/solargreen/meteor/custom-accounts-ui/client/views",
+		"/home/solargreen/meteor/custom-accounts-ui/client/views/application",
+		"/home/solargreen/meteor/custom-accounts-ui/client/views/progressPlan"
 	],
 	"file_history":
 	[
-		"/home/solargreen/meteor/custom-accounts-ui/server/users.js",
+		"/home/solargreen/meteor/custom-accounts-ui/client/views/progressPlan/progressPlanHeader.html",
+		"/home/solargreen/meteor/custom-accounts-ui/client/main.html",
 		"/home/solargreen/meteor/custom-accounts-ui/methods/MatchHelpers.js",
+		"/home/solargreen/meteor/custom-accounts-ui/client/custom-accounts-ui/helpers/membership_helpers.js",
+		"/home/solargreen/meteor/custom-accounts-ui/server/users.js",
 		"/home/solargreen/meteor/custom-accounts-ui/collections/memberships.js",
 		"/home/solargreen/meteor/custom-accounts-ui/server/email.js",
 		"/home/solargreen/meteor/custom-accounts-ui/client/custom-accounts-ui/login_buttons_session.js",
@@ -259,10 +304,7 @@
 		"/home/solargreen/meteor/uploadsTest/client/sortable1c/sortable1c.html",
 		"/home/solargreen/meteor/uploadsTest/client/xedit/xedit.html",
 		"/home/solargreen/meteor/uploadsTest/client/xedit/xedit.js",
-		"/home/solargreen/meteor/uploadsTest/client/pages/activity/column.html",
-		"/home/solargreen/meteor/uploadsTest/client/summernote/plugin/summernote-ext-iframeTemplate.js",
-		"/home/solargreen/meteor/uploadsTest/client/summernote/plugin/summernote-ext-video.js",
-		"/home/solargreen/meteor/uploadsTest/client/summernote/plugin/summernote-ext-fontstyle.js"
+		"/home/solargreen/meteor/uploadsTest/client/pages/activity/column.html"
 	],
 	"find":
 	{
@@ -280,6 +322,7 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"currentS",
 			"Match.email",
 			"@",
 			"seciton",
@@ -406,8 +449,7 @@
 			"sort:",
 			"TeacherViewAS",
 			"Note",
-			"author",
-			"student"
+			"author"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -428,24 +470,54 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 5,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "client/custom-accounts-ui/login_buttons.html",
+					"file": "lib/Router.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 7745,
+						"buffer_size": 612,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								5931,
-								5931
+								612,
+								612
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "client/custom-accounts-ui/login_buttons.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 8583,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								6625,
+								6625
 							]
 						],
 						"settings":
@@ -455,14 +527,14 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 2958.0,
+						"translation.y": 612.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
-					"buffer": 1,
+					"buffer": 2,
 					"file": "client/custom-accounts-ui/login_buttons_dialogs.html",
 					"semi_transient": false,
 					"settings":
@@ -487,11 +559,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
-					"buffer": 2,
+					"buffer": 3,
 					"file": "client/custom-accounts-ui/i18n/en.i18n.js",
 					"semi_transient": false,
 					"settings":
@@ -513,10 +585,68 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 95.0,
-						"translation.y": 1326.0,
+						"translation.y": 952.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "client/views/progressPlan/custom-accounts-ui.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 209,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								89,
+								89
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "client/views/application/layout.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 183,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								58,
+								58
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
 					"type": "text"
 				}
 			]
@@ -526,20 +656,20 @@
 			"sheets":
 			[
 				{
-					"buffer": 3,
+					"buffer": 6,
 					"file": "client/custom-accounts-ui/login_buttons.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 17224,
+						"buffer_size": 23118,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								16065,
-								16065
+								1123,
+								1123
 							]
 						],
 						"settings":
@@ -549,27 +679,55 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 7488.0,
+						"translation.y": 510.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 3,
 					"type": "text"
 				},
 				{
-					"buffer": 4,
-					"file": "server/users.js",
-					"semi_transient": false,
+					"buffer": 7,
+					"file": "client/views/progressPlan/custom-accounts-ui.css",
+					"semi_transient": true,
 					"settings":
 					{
-						"buffer_size": 3752,
+						"buffer_size": 31,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3746,
-								3746
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/CSS/CSS.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "server/users.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 8716,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								6024,
+								6024
 							]
 						],
 						"settings":
@@ -579,27 +737,27 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1173.0,
+						"translation.y": 2244.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 9,
 					"type": "text"
 				},
 				{
-					"buffer": 5,
-					"file": "collections/memberships.js",
+					"buffer": 9,
+					"file": "server/publications.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2198,
+						"buffer_size": 432,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								539,
-								539
+								425,
+								425
 							]
 						],
 						"settings":
@@ -612,39 +770,71 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 8,
 					"type": "text"
 				},
 				{
-					"buffer": 6,
-					"file": "methods/MatchHelpers.js",
+					"buffer": 10,
+					"file": "collections/memberships.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2485,
+						"buffer_size": 2282,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1103,
-								1103
+								597,
+								597
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 119.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 11,
 					"type": "text"
 				},
 				{
-					"buffer": 7,
+					"buffer": 11,
+					"file": "client/custom-accounts-ui/helpers/membership_helpers.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1295,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								71,
+								71
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 10,
+					"type": "text"
+				},
+				{
+					"buffer": 12,
 					"file": "client/custom-accounts-ui/login_buttons_dialogs.js",
 					"semi_transient": false,
 					"settings":
@@ -670,24 +860,24 @@
 						"translation.y": 1436.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 13,
 					"type": "text"
 				},
 				{
-					"buffer": 8,
+					"buffer": 13,
 					"file": "client/custom-accounts-ui/helpers/login_buttons_session.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3150,
+						"buffer_size": 3185,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1852,
-								1852
+								1984,
+								1984
 							]
 						],
 						"settings":
@@ -696,11 +886,11 @@
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.x": -0.0,
+						"translation.y": 765.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 12,
 					"type": "text"
 				}
 			]
@@ -786,7 +976,7 @@
 		],
 		"width": 0.0
 	},
-	"selected_group": 1,
+	"selected_group": 0,
 	"settings":
 	{
 	},

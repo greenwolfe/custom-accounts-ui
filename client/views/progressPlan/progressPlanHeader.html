@@ -1,12 +1,7 @@
-<head>
-  <title>accounts-ui-test</title>
-</head>
-
-<body>
-
+<template name="progressPlanHeader">
   <div class="navbar navbar-default" role="navigation">
       <div class="navbar-header">
-          <a class="navbar-brand" href="#">accounts ui test</a>
+          <a class="navbar-brand" href="{{pathFor 'progressPlan'}}">accounts ui test</a>
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
               <span class="sr-only">Toggle navigation</span>
               <span class="icon-bar"></span>
@@ -15,19 +10,17 @@
           </button>
       </div>
       <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li class="{{activeIfEditingMainPage}} {{hiddenIfNotTeacher}}">
+              <a href="#" id='editButton'>Edit</a>
+            </li>
+          </ul>
           <ul class="nav navbar-nav navbar-right">
             {{> loginButtons}} <!-- here -->
           </ul>
       </div>
   </div>
-
-
-  <h1>Welcome to Meteor!</h1>
-
-  {{> hello}}
-</body>
-
-<template name="hello">
-  <button>Click Me</button>
-  <p>You've pressed the button {{counter}} times.</p>
 </template>
+
+
+
