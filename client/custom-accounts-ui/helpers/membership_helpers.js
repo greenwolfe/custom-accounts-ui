@@ -14,9 +14,9 @@ currentMembershipFor = function(member,of) {
 }
 
 var currentMembershipFactory = function(of) {
-  return function() {
+  return function(member) {
     var today = new Date();
-    var member = Meteor.userId(); //or ViewAs
+    var member = member || Meteor.userId(); //or ViewAs
     var membership = Memberships.find(
       {member:member,of:of},
       {$sort:{to:-1}},
@@ -35,3 +35,7 @@ currentGroup = currentMembershipFactory('Groups');
 Template.registerHelper('currentGroup',currentGroup);
 currentSection = currentMembershipFactory('Sections');
 Template.registerHelper('currentSection',currentSection);
+
+Template.registerHelper('userIsInRole',function(user,role) {
+  return Roles.userIsInRole(user,role);
+});

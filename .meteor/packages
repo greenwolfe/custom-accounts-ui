@@ -17,3 +17,4 @@ anti:i18n
 zuuk:stale-session
 iron:router
 sacha:spin
+reactive-dict

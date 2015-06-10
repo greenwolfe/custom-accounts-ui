@@ -13,7 +13,7 @@ var VALID_KEYS = [
   'errorMessage',
   'infoMessage',
   'childrenOrAdvisees',
-  'newEmails', 
+  'newEmails',  //deprecated
 
   // dialogs with messages (info and error)
   'resetPasswordToken',
@@ -67,8 +67,6 @@ loginButtonsSession = {
     this.set('inMessageOnlyFlow', false);
     this.set('inEditProfileFlow',false);
     this.set('dropdownVisible', false);
-    this.set('childrenOrAdvisees', false); 
-    this.set('newEmails',false);
     this.resetMessages();
   },
 

@@ -1,5 +1,6 @@
 <template name="loginButtons">
-  {{#if currentUser}}
+  <!-- improve this logic so logInDropdown is shown until logged in? -->
+  {{#if currentUser}} <!-- or view As -->
     {{#unless loggingIn}}
       {{#with currentUser}}
         {{>logOutDropdown}}
@@ -10,6 +11,7 @@
   {{/if}}
 </template>
 
+<!-- logOutDropdown -->
 <template name="logOutDropdown">
   <li id="login-dropdown-list" class="dropdown">
     <a class="dropdown-toggle" data-toggle="dropdown">
@@ -17,24 +19,25 @@
       <b class="caret"></b>
     </a>
     <div class="dropdown-menu">
-      {{>loginButtonsMessages}}
-      {{#unless inMessageOnlyFlow}}
-        {{#if inChangePasswordFlow}}
-          {{>changePasswordForm}}
-        {{else}} {{#if inEditProfileFlow}}
-          {{>editProfileForm}}
-        {{else}}
-          <button class="btn btn-primary btn-block" id="login-buttons-edit-profile">Edit Profile</button>
-          <button class="btn btn-primary btn-block" id="login-buttons-open-change-password">Change Password</button>
-          <button class="btn btn-block btn-primary" id="login-buttons-logout">Sign out</button>
-        {{/if}} {{/if}}
+      {{#if inChangePasswordFlow}}
+        {{>changePasswordForm}}
+      {{else}} {{#if inEditProfileFlow}}
+        {{>editProfileForm}}
       {{else}}
-        <button class="btn btn-block btn-primary" id="login-buttons-logout-message-only-OK">OK</button>
-      {{/unless}}
+        <button class="btn btn-primary btn-block" id="login-buttons-edit-profile">Edit Profile</button>
+        <button class="btn btn-primary btn-block" id="login-buttons-open-change-password">Change Password</button>
+        <button class="btn btn-block btn-primary" id="login-buttons-logout">Sign out</button>
+        {{#if isInRole 'teacher'}}
+            <a href="{{pathFor 'validateAccounts'}}">
+              Validate accounts
+            </a>
+        {{/if}}
+      {{/if}} {{/if}}
     </div>
   </li>
 </template>
 
+<!-- logInDropdown -->
 <template name="logInDropdown">
   <li id="login-dropdown-list" class="dropdown">
     <a class="dropdown-toggle" data-toggle="dropdown">
@@ -42,25 +45,27 @@
       <b class="caret"></b>
     </a>
     <div class="dropdown-menu">
-      {{>loginButtonsMessages}}
-      {{#unless inMessageOnlyFlow}}
-        {{#if inSignupFlow}}
-          {{>createAccountForm}}
-        {{else}}
-          {{#if inForgotPasswordFlow}}
-            {{>forgotPasswordForm}}
-          {{else}}
-            {{>loginForm}}
-          {{/if}}
-        {{/if}}
+      {{#if inSignupFlow}}
+        {{>createAccountForm}}
       {{else}}
-        <button class="btn btn-block btn-primary" id="login-buttons-message-only-OK">OK</button>
-      {{/unless}}
+        {{#if inForgotPasswordFlow}}
+          {{>forgotPasswordForm}}
+        {{else}}
+          {{>loginForm}}
+        {{/if}}
+      {{/if}}
     </div>
   </li>
 </template>
 
+<!-- loginForm -->
 <template name="loginForm">
+  {{#with session 'message'}}
+    {{#if text}}
+      <div class="alert alert-{{type}}">{{text}}</div>
+    {{/if}}
+  {{/with}}
+
   <input id="login-username-or-email" type="usernameOrEmail" placeholder="Username or Email" class="form-control" />
   <input id="login-password" type="password" placeholder="Password" class="form-control" />
 
@@ -72,13 +77,19 @@
   </div>
 </template>
 
+<!-- createAccountForm -->
 <template name="createAccountForm">
+  {{#with session 'message'}}
+    {{#if text}}
+      <div class="alert alert-{{type}}">{{text}}</div>
+    {{/if}}
+  {{/with}}
+
   <input id="login-create-firstname" type="text" placeholder="First name" class="form-control" />
   <input id="login-create-lastname" type="text" placeholder="Last name" class="form-control" />
   <input id="login-create-username" type="text" placeholder="Username" class="form-control" />
   <input id="login-create-email" type="email" placeholder="Email" class="form-control" />
-<!--  <input id="login-create-password" type="password" placeholder="Password" class="form-control" />
-  <input id="login-create-password-again" type="password" placeholder="Confirm Password" class="form-control" />-->
+
   <select id="login-create-role" type="role" class="form-control" required>
     <option value="" selected disabled>Choose role</option>
     <option value="student">Student</option>
@@ -93,27 +104,40 @@
   </select>
   <div id="login-create-choose-students" class="hidden">
     <p>Please enter the names of students you would like to observe.</p>
-    {{#each students}}
+    {{#each session 'childrenOrAdvisees'}}
       <input class="form-control login-create-choose-student" type="student" value="{{name}}" placeholder="Firstname Lastname <Enter>"/>
     {{/each}}
     <input class="form-control login-create-choose-student" type="student" placeholder="Firstname Lastname <Enter>"  />
   </div>
 
   <button class="btn btn-primary col-xs-12 col-sm-12" id="login-buttons-create" type="button">Create</button>
-  <button class="btn btn-primary col-xs-12 col-sm-12" id="login-buttons-cancel-create" type="button">Cancel</button>
+  <button class="btn btn-primary col-xs-12 col-sm-12" id="login-buttons-cancel-create" type="button">Return</button>
 </template>
 
+<!-- forgotPasswordForm -->
 <template name="forgotPasswordForm">
-  <div class="login-form">
+  {{#with session 'message'}}
+    {{#if text}}
+      <div class="alert alert-{{type}}">{{text}}</div>
+    {{/if}}
+  {{/with}}
 
-      <input id="forgot-password-email" type="email" placeholder="Email" class="form-control" />
+  <div class="login-form">
+    <input id="forgot-password-email" type="email" placeholder="Email" class="form-control" />
 
     <button class="btn btn-primary login-button-form-submit col-xs-12 col-sm-12" id="login-buttons-forgot-password">Reset password</button>
-    <button class="btn btn-primary col-xs-12 col-sm-12" id="login-buttons-cancel-forgot-password" type="button">Cancel</button>
+    <button class="btn btn-primary col-xs-12 col-sm-12" id="login-buttons-cancel-forgot-password" type="button">Return</button>
   </div>
 </template>
 
+<!-- changePasswordForm -->
 <template name="changePasswordForm">
+  {{#with session 'message'}}
+    {{#if text}}
+      <div class="alert alert-{{type}}">{{text}}</div>
+    {{/if}}
+  {{/with}}
+
   <div class="login-form">
     <input id="change-password-old" type="password" placeholder="Current password" class="form-control" />
     <input id="change-password-new" type="password" placeholder="New password" class="form-control" />
@@ -124,7 +148,14 @@
   </div>
 </template>
 
+<!-- editProfileForm -->
 <template name="editProfileForm">
+  {{#with session 'message'}}
+    {{#if text}}
+      <div class="alert alert-{{type}}">{{text}}</div>
+    {{/if}}
+  {{/with}}
+
   <div class="form-group">
     Name: <input id="edit-profile-firstname" type="text" value={{profile.firstName}} class="form-control" />
     <input id="edit-profile-lastname" type="text" value={{profile.lastName}} class="form-control" />
@@ -139,23 +170,31 @@
       <p>
         {{address}}
         {{#unless verified}}
-            <a href="#" class="glyphicon glyphicon-remove remove-email" title="stop observing"></a>
+            <a href="#" class="glyphicon glyphicon-remove remove-email" title="Remove email."></a>
+            {{#if isInRole 'teacher'}}
+              {{#if emailCountIsOne}}
+                <a href="#" class="glyphicon glyphicon-send send-enrollment-email" title="Send validation e-mail."></a>
+              {{/if}}
+            {{/if}}
         {{/unless}}
       </p>
     {{/each}}
-    {{#each newEmails}}
+    {{#each session 'newEmails'}}
       <input class="form-control edit-profile-add-email" type="email" value="{{address}}" placeholder="Add another email."/>
     {{/each}}
     <input class="form-control edit-profile-add-email" type="email" placeholder='Add another email.'>
   </div>
-  {{#if isInRole 'teacher'}} <!-- and if viewing as another user -->
-    <select id="edit-profile-role" type="role" class="form-control" required>
-      <option value="student" {{roleSelected 'student'}}>Student</option>
-      <option value="teacher" {{roleSelected 'teacher'}}>Teacher</option>
-      <option value="parentOrAdvisor" {{roleSelected 'parentOrAdvisor'}}>Parent or Advisor</option>
-    </select>
+  {{#if isInRole 'teacher'}} 
+    {{#unless isSelf}}
+      Role:
+      <select id="edit-profile-role" type="role" class="form-control" required>
+        <option value="student" {{roleSelected 'student'}}>Student</option>
+        <option value="teacher" {{roleSelected 'teacher'}}>Teacher</option>
+        <option value="parentOrAdvisor" {{roleSelected 'parentOrAdvisor'}}>Parent or Advisor</option>
+      </select>
+    {{/unless}}
   {{/if}}
-  {{#if isInRole 'student'}}
+  {{#if userIsInRole _id 'student'}}
     Section:
     <select id="edit-profile-section" type="section" class="form-control" required>
         <option value="" {{noSectionSelected}} disabled>Choose section</option>
@@ -164,7 +203,7 @@
       {{/each}}
     </select>
   {{/if}}
-  {{#if isInRole 'parentOrAdvisor'}}
+  {{#if userIsInRole _id 'parentOrAdvisor'}}
     <div class="form-group">
       Students you are observing:
       {{#each verifiedStudents}}
@@ -183,7 +222,7 @@
           </p>  
         {{/each}}
       {{/if}}
-      {{#each newStudents}}
+      {{#each session 'childrenOrAdvisees'}}
         <input class="form-control edit-profile-choose-student" type="student" value="{{name}}" placeholder="Firstname Lastname <Enter>"/>
       {{/each}}
       <input class="form-control edit-profile-choose-student" type="student" placeholder="Firstname Lastname <Enter>"  />
@@ -195,12 +234,3 @@
   <button class="btn btn-primary col-xs-12 col-sm-12" id="edit-profile-cancel" type="button">Return</button>
 </template>
 
-<!-- used in various places to display messages to user -->
-<template name="loginButtonsMessages">
-  {{#if errorMessage}}
-    <div class="alert alert-danger">{{errorMessage}}</div>
-  {{/if}}
-  {{#if infoMessage}}
-    <div class="alert alert-success no-margin">{{infoMessage}}</div>
-  {{/if}}
-</template>

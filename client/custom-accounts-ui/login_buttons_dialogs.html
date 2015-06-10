@@ -54,3 +54,14 @@ Not using right now, probably don't need
 			</div><!-- /.modal-dalog -->
 		</div><!-- /.modal -->
 </template>
+
+<!-- loginButtonsMessages, also used in login dialogs
+and now no longer used in the dropdowns-->
+<template name="loginButtonsMessages">
+  {{#if errorMessage}}
+    <div class="alert alert-danger">{{errorMessage}}</div>
+  {{/if}}
+  {{#if infoMessage}}
+    <div class="alert alert-success no-margin">{{infoMessage}}</div>
+  {{/if}}
+</template>

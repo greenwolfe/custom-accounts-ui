@@ -82,6 +82,11 @@ Meteor.methods({
         of: 'Sections'
       });
     }
+  },
+  sendEnrollmentEmail: function(userID) {
+    console.log(userID);
+    console.log(process.env.MAIL_URL);
+    check(userID,Match.idString);
     Accounts.sendEnrollmentEmail(userID);
   },
   isEmailVerified: function(email) {
@@ -141,10 +146,10 @@ Meteor.methods({
       Meteor.users.update(user._id,{$set: {'profile.lastName':lastName}});
 
     if (Roles.userIsInRole(editor,'teacher')) {
-      if (editor._id == cU._id)
-        throw new Meteor.Error("cantChangeOwnRole",'You cannot change your own role.');
       var role = user.profile.postEnrollmentInfo.role || null;
       if ((role) &&  !Roles.userIsInRole(cU,role)) {
+        if (editor._id == cU._id)
+          throw new Meteor.Error("cantChangeOwnRole",'You cannot change your own role.');
         var currentRoles = Roles.getRolesForUser(cU);
         Roles.removeUsersFromRoles(cU,currentRoles);
         Roles.addUsersToRoles(cU,role);
@@ -170,6 +175,7 @@ Meteor.methods({
     }
 
     if (Roles.userIsInRole(cU,'parentOrAdvisor')) {
+      console.log(user);
       user.profile.postEnrollmentInfo.childrenOrAdvisees.forEach(function(fullname,index,cOA) {
         if (!Match.test(fullname,Match.nonEmptyString)) return;
         var name = _.words(fullname);      //options.profile.sectionID = pEi.sectionID;
