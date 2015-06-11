@@ -19,15 +19,15 @@
 			"file": "client/custom-accounts-ui/login_buttons.html",
 			"settings":
 			{
-				"buffer_size": 9353,
+				"buffer_size": 8058,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "client/custom-accounts-ui/helpers/login_buttons_session.js",
+			"file": "client/views/validateAccounts/validateAccounts.html",
 			"settings":
 			{
-				"buffer_size": 3121,
+				"buffer_size": 688,
 				"line_ending": "Unix"
 			}
 		},
@@ -35,7 +35,7 @@
 			"file": "client/custom-accounts-ui/login_buttons.js",
 			"settings":
 			{
-				"buffer_size": 27746,
+				"buffer_size": 28184,
 				"line_ending": "Unix"
 			}
 		},
@@ -48,18 +48,26 @@
 			}
 		},
 		{
-			"file": "lib/Router.js",
+			"file": "client/custom-accounts-ui/helpers/login_buttons_session.js",
 			"settings":
 			{
-				"buffer_size": 1487,
+				"buffer_size": 3437,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "server/publications.js",
+			"file": "server/users.js",
 			"settings":
 			{
-				"buffer_size": 594,
+				"buffer_size": 8834,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "client/views/validateAccounts/validateAccounts.js",
+			"settings":
+			{
+				"buffer_size": 1235,
 				"line_ending": "Unix"
 			}
 		}
@@ -107,26 +115,29 @@
 	[
 		"/home/solargreen/meteor/custom-accounts-ui",
 		"/home/solargreen/meteor/custom-accounts-ui/client",
+		"/home/solargreen/meteor/custom-accounts-ui/client/custom-accounts-ui",
+		"/home/solargreen/meteor/custom-accounts-ui/client/custom-accounts-ui/helpers",
 		"/home/solargreen/meteor/custom-accounts-ui/client/views",
 		"/home/solargreen/meteor/custom-accounts-ui/client/views/validateAccounts",
+		"/home/solargreen/meteor/custom-accounts-ui/collections",
 		"/home/solargreen/meteor/custom-accounts-ui/lib",
 		"/home/solargreen/meteor/custom-accounts-ui/server"
 	],
 	"file_history":
 	[
+		"/home/solargreen/meteor/custom-accounts-ui/client/custom-accounts-ui/helpers/membership_helpers.js",
+		"/home/solargreen/meteor/custom-accounts-ui/server/publications.js",
+		"/home/solargreen/meteor/custom-accounts-ui/lib/Router.js",
+		"/home/solargreen/meteor/custom-accounts-ui/client/custom-accounts-ui/login_buttons_dialogs.html",
 		"/home/solargreen/meteor/custom-accounts-ui/server/users.js",
 		"/home/solargreen/meteor/custom-accounts-ui/client/views/validateAccounts/validateAccounts.html",
 		"/home/solargreen/meteor/custom-accounts-ui/client/views/validateAccounts/validateAccounts.js",
 		"/home/solargreen/meteor/custom-accounts-ui/client/stylesheets/validateAccounts.css",
-		"/home/solargreen/meteor/custom-accounts-ui/client/custom-accounts-ui/helpers/membership_helpers.js",
-		"/home/solargreen/meteor/custom-accounts-ui/lib/Router.js",
 		"/home/solargreen/meteor/custom-accounts-ui/client/custom-accounts-ui/helpers/login_buttons_session.js",
 		"/home/solargreen/meteor/custom-accounts-ui/client/custom-accounts-ui/login_buttons_dialogs.js",
 		"/home/solargreen/meteor/custom-accounts-ui/collections/memberships.js",
 		"/home/solargreen/meteor/custom-accounts-ui/client/custom-accounts-ui/login_buttons.js",
-		"/home/solargreen/meteor/custom-accounts-ui/client/custom-accounts-ui/login_buttons_dialogs.html",
 		"/home/solargreen/meteor/custom-accounts-ui/client/custom-accounts-ui/login_buttons.html",
-		"/home/solargreen/meteor/custom-accounts-ui/server/publications.js",
 		"/home/solargreen/meteor/custom-accounts-ui/client/views/application/layout.html",
 		"/home/solargreen/meteor/custom-accounts-ui/client/views/progressPlan/custom-accounts-ui.html",
 		"/home/solargreen/meteor/custom-accounts-ui/client/custom-accounts-ui/i18n/en.i18n.js",
@@ -249,7 +260,7 @@
 	},
 	"find_in_files":
 	{
-		"height": 0.0,
+		"height": 93.0,
 		"where_history":
 		[
 		]
@@ -259,6 +270,14 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"dropdown-toggle",
+			"login-close",
+			"login-sign-in-link",
+			"login-sign-in-line",
+			"errorMessage",
+			"infoMessage",
+			"errorMessage",
+			"loginButtons",
 			"CAncel",
 			"inMessageOnlyFlow",
 			"info",
@@ -378,15 +397,7 @@
 			"#activityS",
 			"removePga",
 			"disabled",
-			":hover",
-			"attendance",
-			"TeacherViewAs",
-			"TVA",
-			"Model",
-			"sort",
-			"limit",
-			"inline-block",
-			"standard"
+			":hover"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -416,15 +427,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 9353,
+						"buffer_size": 8058,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1946,
-								1946
+								109,
+								109
 							]
 						],
 						"settings":
@@ -434,46 +445,46 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 612.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"file": "client/custom-accounts-ui/helpers/login_buttons_session.js",
+					"file": "client/views/validateAccounts/validateAccounts.html",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3121,
+						"buffer_size": 688,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1959,
-								1959
+								0,
+								0
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"syntax": "Packages/HTML/HTML.tmLanguage",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 663.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 4,
 					"type": "text"
 				}
 			]
 		},
 		{
-			"selected": 0,
+			"selected": 2,
 			"sheets":
 			[
 				{
@@ -482,15 +493,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 27746,
+						"buffer_size": 28184,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1793,
-								1793
+								3689,
+								3689
 							]
 						],
 						"settings":
@@ -500,10 +511,10 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 612.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
@@ -519,8 +530,8 @@
 						"selection":
 						[
 							[
-								1412,
-								1412
+								1373,
+								1373
 							]
 						],
 						"settings":
@@ -538,19 +549,19 @@
 				},
 				{
 					"buffer": 4,
-					"file": "lib/Router.js",
+					"file": "client/custom-accounts-ui/helpers/login_buttons_session.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1487,
+						"buffer_size": 3437,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1134,
-								1134
+								1907,
+								1907
 							]
 						],
 						"settings":
@@ -563,24 +574,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 0,
 					"type": "text"
 				},
 				{
 					"buffer": 5,
-					"file": "server/publications.js",
+					"file": "server/users.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 594,
+						"buffer_size": 8834,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								412,
-								412
+								998,
+								998
 							]
 						],
 						"settings":
@@ -594,6 +605,36 @@
 						"zoom_level": 1.0
 					},
 					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "client/views/validateAccounts/validateAccounts.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1235,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1204,
+								1204
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
 					"type": "text"
 				}
 			]
@@ -665,7 +706,7 @@
 		[
 			[
 				"",
-				"~/meteor/OpenLabv2/OpenLabv2.sublime-project"
+				"~/meteor/accounts-ui-test/accountsUIbootstrap3.sublime-project"
 			]
 		],
 		"width": 380.0

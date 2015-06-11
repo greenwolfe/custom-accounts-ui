@@ -11,14 +11,11 @@ Template.validateAccounts.helpers({
   users: function() {
     var users = Meteor.users.find().fetch();
     users = users.filter(function(user) {
-      console.log(user);
       var verified = false;
       user.emails.forEach(function(email) {
-        console.log(email);
         verified = verified || email.verified;
       });
-      console.log(verified);
-      return !verified;
+      return !verified;  //keep only users without a verified email
     })
     return users;
   }

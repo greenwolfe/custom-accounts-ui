@@ -20,7 +20,7 @@ Meteor.methods({
     var usersRoles = Roles.getRolesForUser(userID);
     if (usersRoles.length > 0)
       throw new Meteor.Error('cantChangeOwnRole','Only a teacher can assign you a new role.');
-    //so this would likely only be called right after a new user is created and is
+    //so this would only be called right after a new user is created and is
     //being assigned their first role
     Roles.addUsersToRoles(userID,role);
     return userID;
@@ -84,8 +84,6 @@ Meteor.methods({
     }
   },
   sendEnrollmentEmail: function(userID) {
-    console.log(userID);
-    console.log(process.env.MAIL_URL);
     check(userID,Match.idString);
     Accounts.sendEnrollmentEmail(userID);
   },
@@ -93,7 +91,7 @@ Meteor.methods({
     check(email,Match.email);
     var user = Meteor.users.findOne({ 'emails.address' : email });
     if (!user)
-      throw new Meteor.Error('invalidEmail','We did not find this e-mail address in our system.');
+      throw new Meteor.Error('invalidEmail','Email not found. No user on the system has registered this email.');
     var email = _.find(user.emails,function(e) {
       return (e.address == email);
     });

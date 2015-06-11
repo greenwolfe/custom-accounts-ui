@@ -2,27 +2,44 @@
  /******* LOGIN BUTTONS ************/
 /**********************************/
 
-// events shared between loginButtonsLoggedOutDropdown and
-// loginButtonsLoggedInDropdown ... copied from Ian:accounts-ui
-//so in need of review
+Template.loginButtons.helpers({
+  greeting: function() {
+    var user = Meteor.user();
+    return (user && !Meteor.loggingIn()) ? user.profile.firstName + ' ' + user.profile.lastName : 'Sign in/Join';
+  },
+  selectedForm: function() {
+    var user = Meteor.user();
+    var selectedForm = loginButtonsSession.get('selectedForm');
+    var validLoggedinForms = ['loggedInForm','changePasswordForm','editProfileForm'];
+    var validLoggedoutForms = ['loginForm','createAccountForm','forgotPasswordForm'];
+    if (user && !Meteor.loggingIn()) {
+      if (_.contains(validLoggedinForms,selectedForm)) {
+        return Template[selectedForm];
+      } else {
+        return Template['loggedInForm'];
+        loginButtonsSession.set('selectedForm','loggedInForm'); //set default
+      }
+    } else {
+      if (_.contains(validLoggedoutForms,selectedForm)) {
+        return Template[selectedForm];
+      } else {
+        return Template['loginForm'];
+        loginButtonsSession.set('selectedForm','loginForm'); //set default
+      }
+    }
+  }
+})
+
 
 Template.loginButtons.events({
   'click input': function(event) {
     event.stopPropagation();
   },
-  'click #login-name-link, click #login-sign-in-link': function(event) {
-    event.stopPropagation();
-    loginButtonsSession.set('dropdownVisible', true);
-    Meteor.flush();
-  },
-  'click .login-close': function() {
-    loginButtonsSession.closeDropdown();
-  },
   'click .dropdown-toggle': function(event) {
     event.stopPropagation();
     Template.loginButtons.toggleDropdown();
   },
-  'click select': function(event,tmpl) {
+  'click select': function(event) {
     event.stopPropagation();
   }  
 });
@@ -32,34 +49,41 @@ Template.loginButtons.toggleDropdown = function() {
   focusInput();
 };
 
-  /**********************************/
- /******* LOG OUT DROPDOWN *********/
-/**********************************/
+var toggleDropdown = function() {
+  $("#login-dropdown-list").toggleClass("open");
+}
 
-/* logout dropdown events */
-Template.logOutDropdown.events({
+var focusInput = function() {
+  setTimeout(function() {
+    $("#login-dropdown-list input").first().focus();
+  }, 0);
+};
+
+ 
+  /********************************/
+ /******* LOGGED IN FORM *********/
+/********************************/
+
+/* sign out form events */
+Template.loggedInForm.events({
   'click #login-buttons-logout': function(event,tmpl) {
     Meteor.logout(function(error) {
-      loginButtonsSession.closeDropdown();
+      //set error message and toggle dropdown back up?
+      //toggleDropdown();
     });
   },
   'click #login-buttons-open-change-password': function(event,tmpl) {
     event.stopPropagation();
-    loginButtonsSession.set('inChangePasswordFlow',true);
+    loginButtonsSession.set('selectedForm','changePasswordForm');
   },
   'click #login-buttons-logout-message-only-OK': function(event,tmpl) {
     loginButtonsSession.closeDropdown();
   },
   'click #login-buttons-edit-profile': function(event,tmpl) {
     event.stopPropagation();
-    loginButtonsSession.set('inEditProfileFlow',true);
+    loginButtonsSession.set('selectedForm','editProfileForm');
   }
 })
-
-  /*********************************/
- /******* LOG IN DROPDOWN *********/
-/*********************************/
-
 
   /**********************************/
  /******* LOGIN FORM ***************/
@@ -89,7 +113,7 @@ Template.loginForm.events({
     login(event,tmpl);
   },
   'keypress #login-username-or-email, keypress #login-password': function(event,tmpl) {
-    if (event.keyCode === 13){
+    if (event.keyCode === 13) {
       login(event,tmpl);
     }
   },
@@ -99,13 +123,9 @@ Template.loginForm.events({
 
     // store values of fields before switching to the signup form
     var usernameOrEmail = getTrimmedVal(tmpl,'login-username-or-email');
-
-    loginButtonsSession.set('inSignupFlow', true);
-    loginButtonsSession.set('inForgotPasswordFlow', false);
-
+    loginButtonsSession.set('selectedForm','createAccountForm');
     // force the ui to update so that we have the approprate fields to fill in
     Meteor.flush();
-
     // update new fields with appropriate defaults
     if (usernameOrEmail){
       if (Match.test(usernameOrEmail,Match.email)) {
@@ -117,14 +137,11 @@ Template.loginForm.events({
   },
   'click #forgot-password-link': function(event,tmpl) {
     event.stopPropagation();
-    //tmpl.Session.set('message',null);
     tmpl.Session.set('message',{type:'info',text:ForgotPasswordMessage});
 
     var usernameOrEmail = getTrimmedVal(tmpl,'login-username-or-email');
 
-    loginButtonsSession.set('inSignupFlow', false);
-    loginButtonsSession.set('inForgotPasswordFlow', true);
-    
+    loginButtonsSession.set('selectedForm','forgotPasswordForm')
     Meteor.flush();
 
     if ((usernameOrEmail) && Match.test(usernameOrEmail,Match.email))
@@ -152,7 +169,7 @@ var login = function(event,tmpl) {
         tmpl.Session.set('message',{type:'danger',text:error.reason || "Unknown error"});
       }
     } else {
-      loginButtonsSession.closeDropdown();
+      toggleDropdown();
     }
   });
 }
@@ -223,22 +240,16 @@ Template.createAccountForm.events({
 
     var username = getTrimmedVal(tmpl,'login-create-username');
     var email = getTrimmedVal(tmpl,'login-create-email');
-//    var password = getVal(tmpl,'login-create-password');
-
-    loginButtonsSession.set('inSignupFlow', false);
-    loginButtonsSession.set('inForgotPasswordFlow', false);
+    loginButtonsSession.set('selectedForm','loginForm');
 
     // force the ui to update so that we have the approprate fields to fill in
     Meteor.flush();
-
     // update new fields with appropriate defaults
     if (username) {
       $('#login-username-or-email').val(username);
     } else if (email) {
       $('#login-username-or-email').val(email);
     }
-//    if (password) 
-//      $('#login-password').val(password);
   },
   'click #login-buttons-create': function(event,tmpl) {
     event.stopPropagation();
@@ -327,12 +338,10 @@ Template.forgotPasswordForm.events({
 
     var email = getTrimmedVal(tmpl,'forgot-password-email');
 
-    loginButtonsSession.set('inSignupFlow', false);
-    loginButtonsSession.set('inForgotPasswordFlow', false);
+    loginButtonsSession.set('selectedForm','loginForm');
 
     // force the ui to update so that we have the approprate fields to fill in
     Meteor.flush();
-
     // update new fields with appropriate defaults
     if (email) 
       $('#login-username-or-email').val(email);  
@@ -354,6 +363,7 @@ var forgotPassword = function(event,tmpl) {
   tmpl.Session.set('message',{type:'info',text:ForgotPasswordMessage});
 
   var email = getTrimmedVal(tmpl,'forgot-password-email');
+  if (!Match.test(email,Match.email)) return tmpl.Session.set('message',{type:'danger',text:'Invalid email.'});
   Meteor.call('isEmailVerified',email,function(error,isVerified) {
     if (error) {
       tmpl.Session.set('message',{type:'danger',text:error.reason || 'Email not found. No user on the system has registered this email.'})
@@ -381,7 +391,7 @@ var forgotPassword = function(event,tmpl) {
 
 Template.changePasswordForm.onCreated(function() { 
   this.Session = new ReactiveDict; //private session for each instance of the template
-  this.Session.set('message',{type:'info',text:ForgotPasswordMessage}); //{type:[danger,success, info, warning, primary],text:'some message'}
+  this.Session.set('message',null); //{type:[danger,success, info, warning, primary],text:'some message'}
 })
 
 /* change password form helpers */
@@ -410,7 +420,7 @@ Template.changePasswordForm.events({
   'click #login-buttons-cancel-change-password': function(event,tmpl) {
     event.stopPropagation();
     tmpl.Session.set('message',null);
-    loginButtonsSession.set('inChangePasswordFlow',false);    
+    loginButtonsSession.set('selectedForm','loggedInForm');
   }
 });
 
@@ -592,7 +602,7 @@ Template.editProfileForm.events({
     event.stopPropagation();
     var tmpl = Template.instance();
     tmpl.Session.set('message',null);
-    loginButtonsSession.set('inEditProfileFlow',false);
+    loginButtonsSession.set('selectedForm','loggedInForm');
   },
   'click .stop-observing': function(event,tmpl) {
     event.stopPropagation();
@@ -708,17 +718,6 @@ var getTrimmedVal = function(tmpl,id) {
     return $element.val().replace(/^\s*|\s*$/g, ""); // trim;
   }
 };
-
-var toggleDropdown = function() {
-  $("#login-dropdown-list").toggleClass("open");
-}
-
-var focusInput = function() {
-  setTimeout(function() {
-    $("#login-dropdown-list input").first().focus();
-  }, 0);
-};
-
 
 
 

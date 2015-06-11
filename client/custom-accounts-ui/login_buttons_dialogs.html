@@ -1,6 +1,6 @@
 <body>
 	{{> setPasswordDialog}}
-	{{> loginMessagesDialog}}
+	{{> loginMessageOnlyDialog}}
 </body>
 
 <template name="setPasswordDialog">
@@ -12,9 +12,13 @@
 						<h4 class="modal-title">Choose a Password</h4>
 					</div>
 					<div class="modal-body">
+					  {{#with session 'message'}}
+					    {{#if text}}
+					      <div class="alert alert-{{type}}">{{text}}</div>
+					    {{/if}}
+					  {{/with}}
 						<input id="login-create-password" type="password" placeholder="Password" class="form-control" />
   					<input id="login-create-password-again" type="password" placeholder="Confirm Password" class="form-control" /><br>
-						{{> loginButtonsMessages}}
 					</div>
 					<div class="modal-footer">
 						<a class="btn btn-default" id="login-cancel-set-password-dialog">{{cancelOrClose}}</a>
@@ -28,40 +32,21 @@
 </template>
 
 
-<!--
-Not using right now, probably don't need
-<template name="_loginButtonsMessagesDialog">
-	{{#if visible}}
-		<div class="accounts-dialog accounts-centered-dialog" id="login-buttons-message-dialog">
-			{{> loginButtonsMessages}}
-			<div class="login-button" id="messages-dialog-dismiss-button">{{i18n 'loginButtonsMessagesDialog.dismiss'}}</div>
-		</div>
-	{{/if}}
-</template>
--->
-
-<template name="loginMessagesDialog">
-		<div class="modal" id="login-messages-modal">
+<template name="loginMessageOnlyDialog">
+		<div class="modal" id="login-message-only-modal">
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-body">
-						{{> loginButtonsMessages}}
+					  {{#with messageOnly}}
+					    {{#if text}}
+					      <div class="alert alert-{{type}}">{{text}}</div>
+					    {{/if}}
+					  {{/with}}
 					</div>
 					<div class="modal-footer">
-						<a class="btn btn-default" id="login-cancel-message-dialog">OK</a>
+						<a class="btn btn-default" id="login-cancel-message-only">OK</a>
 					</div>
 				</div><!-- /.modal-content -->
 			</div><!-- /.modal-dalog -->
 		</div><!-- /.modal -->
-</template>
-
-<!-- loginButtonsMessages, also used in login dialogs
-and now no longer used in the dropdowns-->
-<template name="loginButtonsMessages">
-  {{#if errorMessage}}
-    <div class="alert alert-danger">{{errorMessage}}</div>
-  {{/if}}
-  {{#if infoMessage}}
-    <div class="alert alert-success no-margin">{{infoMessage}}</div>
-  {{/if}}
 </template>

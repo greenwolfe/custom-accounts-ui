@@ -1,61 +1,25 @@
 <template name="loginButtons">
-  <!-- improve this logic so logInDropdown is shown until logged in? -->
-  {{#if currentUser}} <!-- or view As -->
-    {{#unless loggingIn}}
-      {{#with currentUser}}
-        {{>logOutDropdown}}
-      {{/with}}
-    {{/unless}}
-  {{else}}
-    {{>logInDropdown}}
+  <li id="login-dropdown-list" class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown">
+      {{{greeting}}}
+      <b class="caret"></b>
+    </a>
+    <div class="dropdown-menu">
+      {{> selectedForm currentUser}} <!-- make my own impersonated user helper -->
+    </div>
+  </li>
+</template>
+
+<!-- logged in form -->
+<template name="loggedInForm">
+  <button class="btn btn-primary btn-block" id="login-buttons-edit-profile">Edit Profile</button>
+  <button class="btn btn-primary btn-block" id="login-buttons-open-change-password">Change Password</button>
+  <button class="btn btn-block btn-primary" id="login-buttons-logout">Sign out</button>
+  {{#if isInRole 'teacher'}}
+      <a href="{{pathFor 'validateAccounts'}}">
+        Validate accounts
+      </a>
   {{/if}}
-</template>
-
-<!-- logOutDropdown -->
-<template name="logOutDropdown">
-  <li id="login-dropdown-list" class="dropdown">
-    <a class="dropdown-toggle" data-toggle="dropdown">
-      {{{profile.firstName}}} {{{profile.lastName}}}
-      <b class="caret"></b>
-    </a>
-    <div class="dropdown-menu">
-      {{#if inChangePasswordFlow}}
-        {{>changePasswordForm}}
-      {{else}} {{#if inEditProfileFlow}}
-        {{>editProfileForm}}
-      {{else}}
-        <button class="btn btn-primary btn-block" id="login-buttons-edit-profile">Edit Profile</button>
-        <button class="btn btn-primary btn-block" id="login-buttons-open-change-password">Change Password</button>
-        <button class="btn btn-block btn-primary" id="login-buttons-logout">Sign out</button>
-        {{#if isInRole 'teacher'}}
-            <a href="{{pathFor 'validateAccounts'}}">
-              Validate accounts
-            </a>
-        {{/if}}
-      {{/if}} {{/if}}
-    </div>
-  </li>
-</template>
-
-<!-- logInDropdown -->
-<template name="logInDropdown">
-  <li id="login-dropdown-list" class="dropdown">
-    <a class="dropdown-toggle" data-toggle="dropdown">
-      Sign in/Join
-      <b class="caret"></b>
-    </a>
-    <div class="dropdown-menu">
-      {{#if inSignupFlow}}
-        {{>createAccountForm}}
-      {{else}}
-        {{#if inForgotPasswordFlow}}
-          {{>forgotPasswordForm}}
-        {{else}}
-          {{>loginForm}}
-        {{/if}}
-      {{/if}}
-    </div>
-  </li>
 </template>
 
 <!-- loginForm -->
@@ -206,12 +170,16 @@
   {{#if userIsInRole _id 'parentOrAdvisor'}}
     <div class="form-group">
       Students you are observing:
+      {{#unless verifiedStudents}}
+        <br/>
+      {{/unless}}
       {{#each verifiedStudents}}
         <p> 
           {{name}} 
           <a href="#" class="glyphicon glyphicon-remove stop-observing" title="stop observing"></a>
         </p>
       {{/each}}
+
 
       {{#if unverifiedStudents}}
         Requests pending approval: 
