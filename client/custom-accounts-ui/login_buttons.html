@@ -194,7 +194,7 @@
       {{/each}}
 
       {{#if lostStudents}}
-        Students not found:
+        Name(s) not found:
         {{#each lostStudents}}
           <p> 
             {{name}} 
@@ -214,6 +214,8 @@
 
 
   <button class="btn btn-primary col-xs-12 col-sm-12" id="edit-profile-save" type="button">Save Changes</button>
-  <button class="btn btn-primary col-xs-12 col-sm-12" id="edit-profile-cancel" type="button">Return</button>
+  {{#if session 'isInDropdown'}}
+    <button class="btn btn-primary col-xs-12 col-sm-12" id="edit-profile-cancel" type="button">Return</button>
+  {{/if}}
 </template>
 

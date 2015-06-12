@@ -457,6 +457,11 @@ Template.editProfileForm.onCreated(function() {
   this.Session.set('message',null); //{type:[danger,success, info, warning, primary],text:'some message'}
 })
 
+Template.editProfileForm.onRendered(function() {
+  //this template also used on the account verification page, where a return button is not needed
+  this.Session.set('isInDropdown',this.$('#edit-profile-username').closest('.dropdown').length);
+})
+
 /* edit profile form helpers */
 Template.editProfileForm.helpers({
   session: function(key) {
@@ -599,8 +604,8 @@ Template.editProfileForm.events({
       }
     });
   },
-  'click .send-enrollment-email': function() {
-    var tmpl = Template.instance();
+  'click .send-enrollment-email': function(event,tmpl) {
+    event.stopPropagation();
     var user = tmpl.data;
     Meteor.call('sendEnrollmentEmail',user._id,function(error) {
       if (error) {
@@ -715,7 +720,7 @@ var updateProfile = function(event,tmpl) {
     if (error) {
       tmpl.Session.set('message',{type:'danger',text:error.reason || 'Unknown error updating profile.'});
     } else {
-      Meteor.flush();
+      //Meteor.flush();
       tmpl.Session.set('message',{type:'success',text:'Profile successfully updated.'});
       tmpl.Session.set('newEmails',null);
       tmpl.Session.set('childrenOrAdvisees',null);
