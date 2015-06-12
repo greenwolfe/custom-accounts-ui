@@ -5,7 +5,7 @@
 Template.loginButtons.helpers({
   greeting: function() {
     var user = Meteor.user();
-    return (user && !Meteor.loggingIn()) ? user.profile.firstName + ' ' + user.profile.lastName : 'Sign in/Join';
+    return (user && !Meteor.loggingIn()) ? (user.profile.firstName + ' ' + user.profile.lastName) || user.username : 'Sign in/Join';
   },
   selectedForm: function() {
     var user = Meteor.user();
@@ -492,11 +492,11 @@ Template.editProfileForm.helpers({
     if (!Roles.userIsInRole(user,'parentOrAdvisor'))
       return '';
     var cOA = [];
-    var students = user.profile.childrenOrAdvisees || '';
+    var students = user.childrenOrAdvisees || '';
     if (students) {
-      students.forEach(function(studentID,index,students) {
-        var student = Meteor.users.findOne(studentID);
-        if (student) {
+      students.forEach(function(s,index,students) {
+        var student = Meteor.users.findOne(s.idOrFullname);
+        if (student && s.verified) {
           var name = (student.profile.firstName + ' ' + student.profile.lastName) || student.userName || 'Name not found?';
           student.name = name;
           cOA.push(student);
@@ -505,23 +505,39 @@ Template.editProfileForm.helpers({
     }
     return cOA;
   },
-  unverifiedStudents: function() {  //revise to use template session
+  unverifiedStudents: function() {  
     var tmpl = Template.instance();
     var user = tmpl.data
     if (!Roles.userIsInRole(user._id,'parentOrAdvisor'))
       return '';
     var cOA = [];
-    var students = user.profile.childrenOrAdvisees || '';
+    var students = user.childrenOrAdvisees || '';
     if (students) {
-      students.forEach(function(studentID,index,students) {
-        var student = Meteor.users.findOne(studentID);
-        if (!student) {
-          student = {_id: studentID, name: studentID};
+      students.forEach(function(s,index,students) {
+        var student = Meteor.users.findOne(s.idOrFullname);
+        if (student && !s.verified) {
+          var name = (student.profile.firstName + ' ' + student.profile.lastName) || student.userName || 'Name not found?';
+          student.name = name;
           cOA.push(student);
         }
       });
     }
     return cOA;
+  },
+  lostStudents: function() {
+    var tmpl = Template.instance();
+    var user = tmpl.data
+    if (!Roles.userIsInRole(user._id,'parentOrAdvisor'))
+      return '';
+    var cOA = [];
+    var students = user.childrenOrAdvisees || '';
+    if (students) {
+      students.forEach(function(s,index,students) {
+        if (!Match.test(s.idOrFullname,Match.idString))
+          cOA.push({_id:s.idOrFullname,name:s.idOrFullname});
+      });
+    }
+    return cOA;    
   },
   roleSelected: function(role) {
     var tmpl = Template.instance();
@@ -608,6 +624,7 @@ Template.editProfileForm.events({
     event.stopPropagation();
     var tmpl = Template.instance();
     var user = tmpl.data;
+    //needs to be edited!
     var successMessage = (Match.test(this._id,Match.idString)) ? 'You have stopped observing ' : 'You have withdrawn your request to observe ';
     successMessage += this.name + '.';
     Meteor.call('removeChildOrAdvisee',user._id,this._id,function(error,id) {
@@ -618,6 +635,19 @@ Template.editProfileForm.events({
       }
     });
   },
+  'click .verify-child-or-advisee': function(event,tmpl) {
+    event.stopPropagation();
+    var tmpl = Template.instance();
+    var user = tmpl.data;
+    var s = this;
+    Meteor.call('verifyChildOrAdvisee',user._id,this._id,function(error,id) {
+      if (error) {
+        tmpl.Session.set('message',{type:'danger',text:error.reason || 'Could not verify child or advisee.  Unknown error.'});
+      } else {
+        tmpl.Session.set('message',{type:'success',text:s.name + ' has been verified.'});
+      }
+    });
+  }
 })
 
  /* update profile */

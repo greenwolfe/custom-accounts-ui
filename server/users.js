@@ -51,10 +51,10 @@ Meteor.methods({
       delete pEi.sectionID;
     } else if (role == 'parentOrAdvisor') { 
       check(pEi.childrenOrAdvisees,[String]);  //childrenOrAdvisees required, but could be empty array
-      options.profile.childrenOrAdvisees = [];
+      options.childrenOrAdvisees = [];
       pEi.childrenOrAdvisees.forEach(function(fullname,index,cOA) {
         if (!Match.test(fullname,Match.nonEmptyString)) return;
-        var name = _.words(fullname);      //options.profile.sectionID = pEi.sectionID;
+        var name = _.words(fullname);      
         var firstName,lastName;
         if (name.length == 2) {
           firstName = name[0];
@@ -65,10 +65,12 @@ Meteor.methods({
           lastName = _.trim(lastName);
         }
         var student = Meteor.users.findOne({'profile.firstName':firstName,'profile.lastName':lastName});
+        //if student is found, pass _id.  if student not found, pass fullname in the hopes that the
+        //teacher can find the correct spelling of the name from the roster
         if (student) {
-          options.profile.childrenOrAdvisees.push(student._id);
+          options.childrenOrAdvisees.push({idOrFullname:student._id,verified:false});
         } else {
-          options.profile.childrenOrAdvisees.push(fullname);
+          options.childrenOrAdvisees.push({idOrFullname:fullname,verified:false});
         }
       });
     }
@@ -81,6 +83,8 @@ Meteor.methods({
         in: section._id,
         of: 'Sections'
       });
+    } else if (role == 'parentOrAdvisor') {
+      Meteor.users.update(userID, {$set: {childrenOrAdvisees:options.childrenOrAdvisees}});
     }
   },
   sendEnrollmentEmail: function(userID) {
@@ -173,11 +177,10 @@ Meteor.methods({
     }
 
     if (Roles.userIsInRole(cU,'parentOrAdvisor')) {
-      console.log(user);
-      user.profile.postEnrollmentInfo.childrenOrAdvisees.forEach(function(fullname,index,cOA) {
+      user.profile.postEnrollmentInfo.childrenOrAdvisees.forEach(function(fullname,index,cOAs) {
         if (!Match.test(fullname,Match.nonEmptyString)) return;
         var name = _.words(fullname);      //options.profile.sectionID = pEi.sectionID;
-        var firstName,lastName;
+        var firstName,lastName,cOA;
         if (name.length == 2) {
           firstName = name[0];
           lastName = name[1]; 
@@ -188,14 +191,36 @@ Meteor.methods({
         }
         var student = Meteor.users.findOne({'profile.firstName':firstName,'profile.lastName':lastName});
         if (student) {
-          Meteor.users.update(user._id,{$addToSet:{'profile.childrenOrAdvisees': student._id}});
+          cOA = {idOrFullname:student._id,
+                 verified:false};
         } else {
-          Meteor.users.update(user._id,{$addToSet:{'profile.childrenOrAdvisees': fullname}});
+          cOA = {idOrFullname:fullname,
+                 verified:false};
         }
+        Meteor.users.update(user._id,{$addToSet:{'childrenOrAdvisees': cOA}});
       });
     }
-
-
+  },
+  verifyChildOrAdvisee: function(userID,studentID) {
+    check(userID,Match.idString);
+    check(studentID,Match.idString);
+    var user = Meteor.users.findOne(userID);
+    if (!user)
+      throw new Meteor.Error('userNotFound','Error: User not found.');
+    var cU = Meteor.user();
+    if (!cU)
+      throw new Meteor.Error('notLoggedIn','You must be logged in.');
+    if (!Roles.userIsInRole(cU,'teacher'))
+      throw new Meteor.Error('notTeacher','Only teachers can verify a request to observe a student.');
+    var student = Meteor.users.findOne(studentID);
+    if (!student)
+      throw new Meteor.Error('studentNotFound','Error:  Student not found.');
+    if (!Roles.userIsInRole(student,'student')) 
+      throw new Meteor.Error('notAStudent', 'You can only observe a registered student.');
+    Meteor.users.update(
+      {_id:userID,
+        'childrenOrAdvisees.idOrFullname':studentID},
+      {$set: {'childrenOrAdvisees.$.verified': true}});
   },
   removeEmail: function(userID,email) {
     check(userID,Match.idString);
@@ -215,7 +240,9 @@ Meteor.methods({
     var user = Meteor.users.findOne(userID);
     if (!user)
       throw new Meteor.Error('invalid user','Cannot remove child or advisee.  Invalid user');
-    Meteor.users.update(userID,{$pull: {'profile.childrenOrAdvisees':studentID}});
-  }
+    Meteor.users.update(
+      {_id:userID},
+      {$pull: {childrenOrAdvisees:{idOrFullname:studentID}}});
+    }
 });
 

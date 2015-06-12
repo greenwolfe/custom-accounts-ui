@@ -4,8 +4,10 @@
  /******* SET PASSWORD DIALOG ******/
 /**********************************/
 
-var doneCallback;
+var doneCallback; //part of accounts-password that has to be handled this way to
+                  //complete the set or reset password cycle and invalidate the token
 
+//set Session variable to be read by modal
 Accounts.onEnrollmentLink(function(token,done) {
   loginButtonsSession.set('enrollAccountToken',token);
   doneCallback = done;
@@ -19,9 +21,11 @@ Accounts.onResetPasswordLink(function(token,done) {
 Template.setPasswordDialog.onCreated(function() { 
   this.Session = new ReactiveDict; //private session for each instance of the template
   this.Session.set('message',null); //{type:[danger,success, info, warning, primary],text:'some message'}
+  this.Session.set('messageOnly',false);
 })
 
 Template.setPasswordDialog.onRendered(function() {
+  //get session variable for token and make it visible
   this.autorun(function() {
     var token = loginButtonsSession.get('enrollAccountToken') ||
                 loginButtonsSession.get('resetPasswordToken');
@@ -41,10 +45,11 @@ Template.setPasswordDialog.events({
     }
   },
   'click #login-cancel-set-password-dialog': function(event,tmpl) {
-    tmpl.Session.set('message',null);
     loginButtonsSession.set('enrollAccountToken',null);
     loginButtonsSession.set('resetPasswordToken',null);
     $('#login-set-password-modal').modal('hide');
+    tmpl.Session.set('message',null);
+    tmpl.Session.set('messageOnly',false);
   }  
 }) 
 
@@ -55,12 +60,9 @@ Template.setPasswordDialog.helpers({
     var tmpl = Template.instance();
     return tmpl.Session.get(key);
   },
-  cancelOrClose: function() {
-    if (loginButtonsSession.get('enrollAccountToken') ||
-        loginButtonsSession.get('resetPasswordToken')) {
-      return 'Cancel';
-    }
-    return 'Close';
+  OkCancel: function() {
+    var tmpl = Template.instance();
+    return tmpl.Session.get('messageOnly') ? 'OK' : 'Cancel';
   }
 })
 
@@ -78,17 +80,16 @@ var setPassword = function(event,tmpl) {
   Accounts.resetPassword(token,password, function(error) {
     if (error) {
       if (error.message === 'Token expired [403]') {
-        loginButtonsSession.set('messageOnly',{type:'danger',text:'Sorry, this link has expired.'});
+        tmpl.Session.set('message',{type:'danger',text:'Sorry, this link has expired.'});
       } else {
-        loginButtonsSession.set('messageOnly',{type:'danger',text:'Sorry, there was a problem resetting your password.'});          
+        tmpl.Session.set('message',{type:'danger',text:'Sorry, there was a problem resetting your password.'});          
       }
     } else {
-      loginButtonsSession.set('messageOnly',{type:'success',text:'Success!  Your password has been changed.'});  
+      tmpl.Session.set('message',{type:'success',text:'Success!  Your password has been changed.'});  
     }
+    tmpl.Session.set('messageOnly',true);
     loginButtonsSession.set('enrollAccountToken', null);
     loginButtonsSession.set('resetPasswordToken',null);
-    $('#login-set-password-modal').modal('hide');
-    $('#login-message-only-modal').modal();
     // Call done before navigating away from here
     if (doneCallback) {
       doneCallback();
@@ -96,23 +97,6 @@ var setPassword = function(event,tmpl) {
     Router.go('/');
   }); 
 }
-
-  /**************************************/
- /***** LOGIN MESSAGE ONLY DIALOG ******/
-/**************************************/
-
-Template.loginMessageOnlyDialog.helpers({
-  messageOnly: function() {
-    return loginButtonsSession.get('messageOnly');
-  }
-})
-
-Template.loginMessageOnlyDialog.events({
-  'click #login-cancel-message-only': function(event,tmpl) {
-    $('#login-message-only-modal').modal('hide');
-    loginButtonsSession.set('messageOnly',null);
-  }
-})
 
   /**********************/
  /******* HELPERS ******/

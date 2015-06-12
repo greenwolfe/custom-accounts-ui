@@ -11,10 +11,20 @@ Template.validateAccounts.helpers({
   users: function() {
     var users = Meteor.users.find().fetch();
     users = users.filter(function(user) {
+      console.log(user.profile.firstName + ' ' + user.profile.lastName);
       var verified = false;
-      user.emails.forEach(function(email) {
-        verified = verified || email.verified;
-      });
+      if ('emails' in user) {
+        user.emails.forEach(function(email) {
+          console.log(email);
+          verified = verified || email.verified;
+        });
+      }
+      if (Roles.userIsInRole(user,'parentOrAdvisor') && ('childrenOrAdvisees' in user)) {
+        user.childrenOrAdvisees.forEach(function(student) {
+          console.log(student);
+          verified = verified && student.verified;
+        });
+      }
       return !verified;  //keep only users without a verified email
     })
     return users;

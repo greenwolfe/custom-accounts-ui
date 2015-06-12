@@ -1,39 +1,10 @@
 //Must be placed in a subfolder so that it is loaded before
 //the templates that use its global variables
-/*var VALID_KEYS = [
-  //'dropdownVisible', //deprecated?
-
-  // XXX consider replacing these with one key that has an enum for values.
-  //'inSignupFlow', //deprecated?
-  //'inForgotPasswordFlow', //deprecated?
-  //'inChangePasswordFlow', //deprecated?
-  //'inMessageOnlyFlow', //deprecated?
-  //'inEditProfileFlow', //deprecated?
-
-  //'errorMessage', //deprecated?
-  //'infoMessage', //deprecated?
-  //'childrenOrAdvisees', //deprecated
-  //'newEmails',  //deprecated
-
-  // dialogs with messages (info and error)
-  //'resetPasswordToken', //deprecated? (probably still used)
-  //'enrollAccountToken', //deprecated? (probably still used)
-//  'justVerifiedEmail',
-
-//  'configureLoginServiceDialogVisible',
-//  'configureLoginServiceDialogServiceName',
-//  'configureLoginServiceDialogSaveDisabled'
-
-];*/
 
 var VALID_KEYS = [
   'selectedForm',
   'resetPasswordToken', 
-  'enrollAccountToken', 
-  'messageOnly' /*{
-        type:[danger,success, info, warning, primary],
-        text:'message intended for message only dialog'
-      }*/
+  'enrollAccountToken'
 ];
 
 var validateKey = function (key) {

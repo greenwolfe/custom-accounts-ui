@@ -13,6 +13,7 @@
 <!-- logged in form -->
 <template name="loggedInForm">
   <button class="btn btn-primary btn-block" id="login-buttons-edit-profile">Edit Profile</button>
+  <!-- change password and signout only available for real users, block if impersonating -->
   <button class="btn btn-primary btn-block" id="login-buttons-open-change-password">Change Password</button>
   <button class="btn btn-block btn-primary" id="login-buttons-logout">Sign out</button>
   {{#if isInRole 'teacher'}}
@@ -180,19 +181,33 @@
         </p>
       {{/each}}
 
+      Requests pending approval:
+      {{#unless unverifiedStudents}} 
+        <br/>
+      {{/unless}}
+      {{#each unverifiedStudents}}
+        <p> 
+          {{name}} 
+          <a href="#" class="glyphicon glyphicon-remove stop-observing" title="stop observing"></a> 
+          <a href="#" class="glyphicon glyphicon-ok verify-child-or-advisee" title="verify child or advisee"></a> 
+        </p>  
+      {{/each}}
 
-      {{#if unverifiedStudents}}
-        Requests pending approval: 
-        {{#each unverifiedStudents}}
+      {{#if lostStudents}}
+        Students not found:
+        {{#each lostStudents}}
           <p> 
             {{name}} 
-            <a href="#" class="glyphicon glyphicon-remove stop-observing" title="stop observing"></a>  
-          </p>  
+            <a href="#" class="glyphicon glyphicon-remove stop-observing" title="stop observing"></a>
+          </p>
+        {{/each}}
+      {{/if}}      
+      {{#if session 'childrenOrAdvisees'}}
+        New requests:
+        {{#each session 'childrenOrAdvisees'}}
+          <input class="form-control edit-profile-choose-student" type="student" value="{{name}}" placeholder="Firstname Lastname <Enter>"/>
         {{/each}}
       {{/if}}
-      {{#each session 'childrenOrAdvisees'}}
-        <input class="form-control edit-profile-choose-student" type="student" value="{{name}}" placeholder="Firstname Lastname <Enter>"/>
-      {{/each}}
       <input class="form-control edit-profile-choose-student" type="student" placeholder="Firstname Lastname <Enter>"  />
     </div>
   {{/if}}
