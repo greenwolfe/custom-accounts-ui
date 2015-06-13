@@ -80,7 +80,7 @@ Meteor.methods({
     if (role == 'student') {
       Meteor.call('addMember',{
         member: userID,
-        in: section._id,
+        specifically: section._id,
         of: 'Sections'
       });
     } else if (role == 'parentOrAdvisor') {
@@ -169,7 +169,7 @@ Meteor.methods({
         if (!currentMembership || (currentMembership.in != sectionID)) {
           Meteor.call('addMember',{
             member: user._id,
-            in: sectionID,
+            specifically: sectionID,
             of: 'Sections'
           });
         }

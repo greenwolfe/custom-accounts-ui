@@ -75,15 +75,15 @@ Meteor.methods({
 if (Meteor.isServer) {
 if (Sections.find().count() === 0) {
   Sections.insert({
-    section : 'Bblock',
+    name : 'Bblock',
   });
 
   Sections.insert({
-    section : 'Fblock',
+    name : 'Fblock',
   });
 
   Sections.insert({
-    section : 'Gblock',
+    name : 'Gblock',
   });
 
 };

@@ -4,7 +4,7 @@ Meteor.methods({
   addMember: function(membership) {
     check(membership,{
       member:  Match.idString,
-      in: Match.idString,
+      specifically: Match.idString,
       of: Match.OneOf('Groups','Sections'),
       from: Match.Optional(Date),
       to: Match.Optional(Date)
@@ -13,7 +13,7 @@ Meteor.methods({
     membership.to = membership.to || new Date(8630000000000000); //new Date(8640000000000000) =  Sat Sep 13 275760 01:00:00 GMT+0100 (BST) and is the maximum possible javascript Date
 
     var Collection = Mongo.Collection.get(membership.of);
-    var item = Collection.findOne(membership.in);
+    var item = Collection.findOne(membership.specifically);
     if (!item)
       throw new Meteor.Error('collection-not-found', "Cannot add member, not a valid collection");
     var member = Meteor.users.findOne(membership.member);

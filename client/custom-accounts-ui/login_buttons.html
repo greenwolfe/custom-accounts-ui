@@ -5,7 +5,7 @@
       <b class="caret"></b>
     </a>
     <div class="dropdown-menu">
-      {{> selectedForm currentUser}} <!-- make my own impersonated user helper -->
+      {{> selectedForm impersonatedOrUser}} 
     </div>
   </li>
 </template>
@@ -64,7 +64,7 @@
   <select id="login-create-section" type="section" class="form-control hidden" required>
     <option value="" selected disabled>Choose section</option>
     {{#each sections}}
-      <option value="{{_id}}">{{{section}}}</option>
+      <option value="{{_id}}">{{{name}}}</option>
     {{/each}}
   </select>
   <div id="login-create-choose-students" class="hidden">
@@ -164,7 +164,7 @@
     <select id="edit-profile-section" type="section" class="form-control" required>
         <option value="" {{noSectionSelected}} disabled>Choose section</option>
       {{#each sections}}
-        <option value="{{_id}}" {{sectionSelected}}>{{{section}}}</option>
+        <option value="{{_id}}" {{sectionSelected}}>{{{name}}}</option>
       {{/each}}
     </select>
   {{/if}}

@@ -4,7 +4,7 @@
 
 Template.loginButtons.helpers({
   greeting: function() {
-    var user = Meteor.user();
+    var user = Meteor.impersonatedOrUser();
     return (user && !Meteor.loggingIn()) ? (user.profile.firstName + ' ' + user.profile.lastName) || user.username : 'Sign in/Join';
   },
   selectedForm: function() {
@@ -482,13 +482,13 @@ Template.editProfileForm.helpers({
   sectionSelected: function () {
     var tmpl = Template.instance();
     var user = tmpl.data
-    var cS = currentSection(user._id);
+    var cS = Meteor.currentSection(user._id);
     return ((cS) && (this._id == cS._id)) ? 'selected' : '';
   },
   noSectionSelected: function() {
     var tmpl = Template.instance();
     var user = tmpl.data
-    var cS = currentSection(user._id);
+    var cS = Meteor.currentSection(user._id);
     return (cS) ? '' : 'selected';
   },
   verifiedStudents: function() { 
@@ -702,7 +702,7 @@ var updateProfile = function(event,tmpl) {
       if (!Match.test(sectionID,Match.idString)) return tmpl.Session.set('message',{type:'danger',text:"You must choose a section."});
       var section = Sections.findOne(sectionID);
       if (!section) return tmpl.Session.set('message',{type:'danger',text:"Invalid section."});
-      var cS = currentSection();
+      var cS = Meteor.currentSection();
       if ((!cS) || (sectionID != cS._id))
         pEi.sectionID = sectionID;
     } else if (Roles.userIsInRole(cU,'parentOrAdvisor')) {

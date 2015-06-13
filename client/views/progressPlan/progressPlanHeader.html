@@ -11,9 +11,12 @@
       </div>
       <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li class="{{activeIfEditingMainPage}} {{hiddenIfNotTeacher}}">
-              <a href="#" id='editButton'>Edit</a>
-            </li>
+            {{#if isInRole 'teacher'}}
+              <li class="{{activeIfEditingMainPage}} {{hiddenIfNotTeacher}}">
+                <a href="#" id='editButton'>Edit</a>
+              </li>
+            {{/if}}
+            {{>viewAs}}
           </ul>
           <ul class="nav navbar-nav navbar-right">
             {{> loginButtons}} <!-- here -->
