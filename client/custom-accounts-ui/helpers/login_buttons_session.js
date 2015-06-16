@@ -20,13 +20,28 @@ var KEY_PREFIX = "Meteor.loginButtons.";
 loginButtonsSession = {
   set: function(key, value) {
     validateKey(key);
-    if ((key == 'viewAs') && (value == Meteor.userId()))
-      value = null; //cannot impersonate self
+    var user = Meteor.user();
+    if ( (key == 'viewAs') && 
+          ( // a little security regarding impersonation, it is still important that publications and subscriptions be managed to prevent improper access to information
+          Roles.userIsInRole(user,'student') || //students cannot impersonate
+          (value == Meteor.userId()) || //cannot impersonate self
+          (Roles.userIsInRole(user,'parentOrAdvisor') && !_.contains(Meteor.childOrAdviseeIds(),value)) //parent or advisor can only impersonate verified students in their list
+          ))
+            value = null; 
     Session.set(KEY_PREFIX + key, value);
   },
   get: function(key) {
     validateKey(key);
-    return Session.get(KEY_PREFIX + key);
+    var user = Meteor.user();
+    var value = Session.get(KEY_PREFIX + key);
+    if ( (key == 'viewAs') && 
+         ( // and a little extra security against the user setting viewAs directly through Session.set rather than loginButtonsSession.set
+          Roles.userIsInRole(user,'student') || //students cannot impersonate
+          (value == Meteor.userId()) || //cannot impersonate self
+          (Roles.userIsInRole(user,'parentOrAdvisor') && !_.contains(Meteor.childOrAdviseeIds(),value)) //parent or advisor can only impersonate verified students in their list
+          ))
+            value = null;
+    return value;
   },
   push: function (key,value) {
     validateKey(key);
@@ -126,6 +141,10 @@ Meteor.childrenOrAdvisees = function(parentOrAdvisor) {
     });
   }
   return cOA;
+}
+Meteor.childOrAdviseeIds = function(parentOrAdvisor) {
+  var cOA = Meteor.childrenOrAdvisees(parentOrAdvisor);
+  return _.pluck(cOA,'_id');
 }
 Template.registerHelper('childrenOrAdvisees',function() {
   return Meteor.childrenOrAdvisees();
