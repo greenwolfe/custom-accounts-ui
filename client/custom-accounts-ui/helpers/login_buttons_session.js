@@ -81,11 +81,20 @@ loginButtonsSession = {
   }
 };
 
+  /****************************/ 
+ /***** ONLOGIN CALLBACK *****/
+/****************************/
+
+/* is there a better place to do this?  Will this constrain any future use of onlogin callback? */
 Accounts.onLogin(function(){
   loginButtonsSession.set('viewAs',null);
   loginButtonsSession.set('invitees',[]);
   loginButtonsSession.set('sectionID',Meteor.currentSectionId());
 })
+
+  /*********************************/ 
+ /***** IMPERSONATION HELPERS *****/
+/*********************************/
 
 Meteor.impersonatedId = function() {
   var viewAs = loginButtonsSession.get('viewAs');
@@ -116,6 +125,10 @@ Template.registerHelper('impersonatedOrUser',function() {
   return Meteor.impersonatedOrUser();
 });
 
+  /****************************/ 
+ /***** SELECTED SECTION *****/
+/****************************/
+
 Meteor.selectedSection = function() {
   var viewAs = loginButtonsSession.get('viewAs');
   var section = Sections.findOne(viewAs);
@@ -126,6 +139,10 @@ Meteor.selectedSection = function() {
 Template.registerHelper('selectedSection',function() {
   return Meteor.selectedSection();
 });
+
+  /****************************************/ 
+ /***** CHILDREN OR ADVISEES HELPERS *****/
+/****************************************/
 
 Meteor.childrenOrAdvisees = function(parentOrAdvisor) {
   var user = parentOrAdvisor || Meteor.user();
