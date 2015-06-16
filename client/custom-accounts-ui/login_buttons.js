@@ -4,7 +4,9 @@
 
 Template.loginButtons.helpers({
   greeting: function() {
-    var user = Meteor.impersonatedOrUser();
+    var user = Meteor.user();
+    if (Roles.userIsInRole(user,'teacher'))
+      user = Meteor.impersonatedOrUser();
     return (user && !Meteor.loggingIn()) ? (user.profile.firstName + ' ' + user.profile.lastName) || user.username : 'Sign in/Join';
   },
   selectedForm: function() {

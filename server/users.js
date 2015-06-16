@@ -26,6 +26,7 @@ Meteor.methods({
     return userID;
   },
   createUnvalidatedUser: function(options) {
+    console.log(options);
     check(options,{ //redundant with checks performed on client before passing options to this method
       username: Match.nonEmptyString,
       email: Match.email,
@@ -79,9 +80,9 @@ Meteor.methods({
     Roles.addUsersToRoles(userID,[role]);
     if (role == 'student') {
       Meteor.call('addMember',{
-        member: userID,
-        specifically: section._id,
-        of: 'Sections'
+        memberID: userID,
+        itemID: section._id,
+        collectionName: 'Sections'
       });
     } else if (role == 'parentOrAdvisor') {
       Meteor.users.update(userID, {$set: {childrenOrAdvisees:options.childrenOrAdvisees}});
@@ -162,15 +163,15 @@ Meteor.methods({
       var sectionID = user.profile.postEnrollmentInfo.sectionID || null;
       if (sectionID) {
         var currentMembership = Memberships.find(
-          {member:user._id,of:'Sections'},
+          {memberID:user._id,collectionName:'Sections'},
           {$sort:{to:-1}},
           {limit:1}
         ).fetch().pop();
         if (!currentMembership || (currentMembership.in != sectionID)) {
           Meteor.call('addMember',{
-            member: user._id,
-            specifically: sectionID,
-            of: 'Sections'
+            memberID: user._id,
+            itemID: sectionID,
+            collectionName: 'Sections'
           });
         }
       }

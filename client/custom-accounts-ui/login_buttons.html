@@ -5,7 +5,11 @@
       <b class="caret"></b>
     </a>
     <div class="dropdown-menu">
-      {{> selectedForm impersonatedOrUser}} 
+      {{#if isInRole 'teacher'}}
+        {{> selectedForm impersonatedOrUser}} 
+      {{else}} 
+        {{> selectedForm currentUser}}
+      {{/if}}
     </div>
   </li>
 </template>

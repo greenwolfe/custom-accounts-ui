@@ -27,3 +27,10 @@ Meteor.publish('memberships',function() {
     this.ready(); //returns blank collection
   }
 })
+Meteor.publish('groups',function() {
+  if (this.userId) {
+    return Groups.find();
+  } else {
+    return this.ready();
+  }
+})

@@ -16,7 +16,7 @@ Template.viewAs.helpers({
         return 'self';
       return '';
     }
-    var selectedText = impersonatedUser.profile.firstName + ' ' + impersonatedUser.profile.lastName;
+    var selectedText = "<span title='" + impersonatedUser.profile.firstName + ' ' + impersonatedUser.profile.lastName + "'>" + impersonatedUser.profile.firstName + "</span>";
     if (Roles.userIsInRole(user,'parentOrAdvisor')) 
       return selectedText;
     if (!section) 
@@ -35,10 +35,9 @@ Template.viewAs.helpers({
 /* user to view helpers */
 Template.userToView.helpers({
   active: function() {
-    if (Roles.userIsInRole(Meteor.userId(),['teacher','parentOrAdvisor']))
-      return ((this._id == Meteor.impersonatedOrUserId()) && !Meteor.selectedSection()) ? 'active' : '';
+    if ((this._id == Meteor.userId()) && !Meteor.selectedSection())
+      return  'active';
     return (this._id == Meteor.impersonatedId()) ? 'active' : '';
-
   }
 })
 
@@ -47,6 +46,8 @@ Template.userToView.events({
   'click li a': function(event,tmpl) {
     event.stopPropagation();
     loginButtonsSession.set('viewAs',tmpl.data._id);
+    loginButtonsSession.set('sectionID',null); //resetting group menu
+    loginButtonsSession.set('invitees',null);
   }
 })
 

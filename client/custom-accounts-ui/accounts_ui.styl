@@ -90,3 +90,40 @@ opacity(n)
 	background-color: #4099FF;
 }
 
+/* imitating bootstrap 2 dropdown style with triangle atop dropdown with rounded corners according to 
+http://stackoverflow.com/questions/19983995/bootstrap-3-arrow-on-dropdown-menu */
+.navbar .nav > li > .dropdown-menu {
+	margin-top: 2px;
+	padding: 20px;
+	border-radius: 6px;
+}
+.navbar .nav > li > .dropdown-menu::before {
+   position: absolute;
+   top: -7px;
+   left: 9px;
+   display: inline-block;
+   border-right: 7px solid transparent;
+   border-bottom: 7px solid #CCC;
+   border-left: 7px solid transparent;
+   border-bottom-color: rgba(0, 0, 0, 0.2);
+   content: '';
+ }
+ .navbar .nav > li > .dropdown-menu::after {
+    position: absolute;
+    top: -6px;
+    left: 10px;
+    display: inline-block;
+    border-right: 6px solid transparent;
+    border-bottom: 6px solid white;
+    border-left: 6px solid transparent;
+    content: '';
+  }
+.navbar .navbar-right > li > .dropdown-menu:before {
+	right: 12px; 
+	left: auto;
+} 
+.navbar .navbar-right > li > .dropdown-menu:after{
+	right: 13px; 
+	left: auto;
+}
+
