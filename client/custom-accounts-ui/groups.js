@@ -13,18 +13,22 @@ Template.groups.helpers({
   invitees: function() {
     var invitees = loginButtonsSession.get('invitees');
     if (!invitees || !_.isArray(invitees))
-      return;
+      return '_____';
+    if (invitees.length == 0)
+      return '_____';
     return groupToString(invitees);
   },
   inviteesMinusCurrent: function() {
     var invitees = loginButtonsSession.get('invitees');
     if (!invitees || !_.isArray(invitees))
-      return '';
+      return '_____';
     if (invitees.length == 0)
-      return '';
+      return '_____';
     var currentGroup = Meteor.groupMemberIds();
     if ((currentGroup) && _.isArray(currentGroup))
       invitees = _.difference(invitees,currentGroup);
+    if (invitees.length == 0)
+      return '_____';    
     return groupToString(invitees);        
   },
   openInvitesCount: function() {
@@ -33,7 +37,6 @@ Template.groups.helpers({
 })
 
 /* groups events */
-//one of these needs invitees minus current?
 Template.groups.events({
   'click #join-group': function(event,tmpl) {
     var user = Meteor.user();
@@ -42,8 +45,17 @@ Template.groups.events({
     var student = Meteor.impersonatedOrUser();
     if (!Roles.userIsInRole(student,'student'))
       return;
-    var currentGroup = Meteor.currentGroup();
     var invitees = loginButtonsSession.get('invitees');
+    if (!invitees || !_.isArray(invitees))
+      return;
+    if (invitees.length == 0)
+      return;
+    var memberIDs = Meteor.groupMemberIds();
+    if ((memberIDs) && _.isArray(memberIDs))
+      invitees = _.difference(invitees,memberIDs);
+    if (invitees.length == 0)
+      return; 
+    var currentGroup = Meteor.currentGroup();
     invitees.forEach(function(studentID){
       Meteor.call('inviteMember',{
         memberID:studentID,
@@ -60,6 +72,11 @@ Template.groups.events({
     var student = Meteor.impersonatedOrUser();
     if (!Roles.userIsInRole(student,'student'))
       return;
+    var invitees = loginButtonsSession.get('invitees');
+    if (!invitees || !_.isArray(invitees))
+      return;
+    if (invitees.length == 0)
+      return;
     //make new group
     Meteor.call('addGroup',function(error,groupID) {
       if (error) {
@@ -72,7 +89,7 @@ Template.groups.events({
           collectionName: 'Groups'
         },alertOnError)
         //invite others
-        var invitees = loginButtonsSession.get('invitees');
+        // (passed through from context above?) var invitees = loginButtonsSession.get('invitees');
         invitees.forEach(function(userID){
           Meteor.call('inviteMember',{
             memberID:userID,

@@ -25,6 +25,12 @@ Template.viewAs.helpers({
   },
   sections: function() {
     return Sections.find({},{sort:{name:1}});
+  },
+  viewParents: function() {
+    return (loginButtonsSession.get('viewParents') || Roles.userIsInRole(Meteor.impersonatedId(),'parentOrAdvisor'));
+  },
+  parents: function() {
+    return Roles.getUsersInRole('parentOrAdvisor');
   }
 })
 
@@ -35,7 +41,7 @@ Template.viewAs.helpers({
 /* user to view helpers */
 Template.userToView.helpers({
   active: function() {
-    if ((this._id == Meteor.userId()) && !Meteor.selectedSection())
+    if ((this._id == Meteor.userId()) && !Meteor.selectedSection() && !Roles.userIsInRole(Meteor.impersonatedId(),'parentOrAdvisor'))
       return  'active';
     return (this._id == Meteor.impersonatedId()) ? 'active' : '';
   }
@@ -48,6 +54,7 @@ Template.userToView.events({
     loginButtonsSession.set('viewAs',tmpl.data._id);
     loginButtonsSession.set('sectionID',null); //resetting group menu
     loginButtonsSession.set('invitees',null);
+    loginButtonsSession.set('viewParents',false);
   }
 })
 
@@ -69,5 +76,26 @@ Template.sectionToView.events({
   'click li a': function(event,tmpl) {
     event.stopPropagation();
     loginButtonsSession.set('viewAs',tmpl.data._id);
+    loginButtonsSession.set('viewParents',false);
+  }
+})
+
+  /*******************************/
+ /******* PARENTS TO VIEW *******/
+/*******************************/
+
+/* parents to view helpers */
+Template.parentsToView.helpers({
+  active: function() {
+    return (loginButtonsSession.get('viewParents') || Roles.userIsInRole(Meteor.impersonatedId(),'parentOrAdvisor')) ? 'active' : '';
+  }
+})
+
+/* parents to view events */
+Template.parentsToView.events({
+  'click li a': function(event,tmpl) {
+    event.stopPropagation();
+    loginButtonsSession.set('viewAs',null);
+    loginButtonsSession.set('viewParents',true);
   }
 })

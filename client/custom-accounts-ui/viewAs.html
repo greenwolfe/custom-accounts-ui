@@ -14,6 +14,7 @@
             {{#each sections}}
               {{> sectionToView}}
             {{/each}} 
+            {{>parentsToView}}
           {{else}}
             {{#if isInRole 'parentOrAdvisor'}}
               {{#each childrenOrAdvisees}}
@@ -27,6 +28,11 @@
             {{#each sectionMembers selectedSection._id}}
               {{>userToView}}
             {{/each}}
+            {{#if viewParents}}
+              {{#each parents}}
+                {{>userToView}}
+              {{/each}}
+            {{/if}}
           {{/if}}
         </ul>
       </div>
@@ -43,5 +49,11 @@
 <template name = 'sectionToView'>
   <li  class='{{active}}'>
     <a href="#">{{name}}</a>
+  </li>
+</template>
+
+<template name = 'parentsToView'>
+  <li  class='{{active}}'>
+    <a href="#">parents/advisors</a>
   </li>
 </template>

@@ -193,7 +193,9 @@
         <p> 
           {{name}} 
           <a href="#" class="glyphicon glyphicon-remove stop-observing" title="stop observing"></a> 
-          <a href="#" class="glyphicon glyphicon-ok verify-child-or-advisee" title="verify child or advisee"></a> 
+          {{#if isInRole 'teacher'}}
+            <a href="#" class="glyphicon glyphicon-ok verify-child-or-advisee" title="verify child or advisee"></a> 
+          {{/if}}
         </p>  
       {{/each}}
 

@@ -7,7 +7,8 @@ var VALID_KEYS = [
   'enrollAccountToken',
   'viewAs', //either a userId or a sectionId
   'invitees', //array of user to invite
-  'sectionID' //section ID for choosing a group
+  'sectionID', //section ID for choosing a group
+  'viewParents' //boolean
 ];
 
 var validateKey = function (key) {
@@ -89,6 +90,7 @@ loginButtonsSession = {
 Accounts.onLogin(function(){
   loginButtonsSession.set('viewAs',null);
   loginButtonsSession.set('invitees',[]);
+  loginButtonsSession.set('viewParents',false);
   loginButtonsSession.set('sectionID',Meteor.currentSectionId());
 })
 
